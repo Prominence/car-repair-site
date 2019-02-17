@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{main}">
+<head>
+    <title th:text="#{default.title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Car Repair test project</h1>
+    <h2>
+        <span><th:block th:text="#{home.requirements.label}"/>:</span>
+    </h2>
+    <img src="images/java-task-1.1.jpg" alt="Requirements"/>
+    <img src="images/java-task-1.2.jpg" alt="Requirements"/>
+</div>
+
+</body>
+</html>

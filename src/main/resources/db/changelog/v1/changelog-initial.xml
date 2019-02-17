@@ -1,0 +1,78 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet id="1" author="prominence">
+        <createTable tableName="client">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="firstName" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middleName" type="VARCHAR(64)"/>
+            <column name="lastName" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="prominence">
+        <addColumn tableName="client">
+            <column name="phoneNo" type="VARCHAR(32)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="3" author="prominence">
+        <createTable tableName="mechanic">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="firstName" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middleName" type="VARCHAR(64)"/>
+            <column name="lastName" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hourlyPayment" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="4" author="prominence">
+        <createTable tableName="orders">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mechanic_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdOn" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="finishedOn" type="DATETIME"/>
+            <column name="totalPrice" type="NUMERIC"/>
+            <column name="orderStatus" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="orders"
+                                 baseColumnNames="client_id"
+                                 constraintName="order_client_fk"
+                                 referencedTableName="client"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="orders"
+                                 baseColumnNames="mechanic_id"
+                                 constraintName="order_mechanic_fk"
+                                 referencedTableName="mechanic"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>
