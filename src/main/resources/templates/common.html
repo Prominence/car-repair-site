@@ -1,0 +1,20 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="pagination(baseUrl, currentPage, totalPages)">
+        <ul class="pagination pagination-small" th:if="${totalPages > 1}">
+            <th:block th:each="page : ${#numbers.sequence(0, totalPages - 1, 1)}" th:if="${page == 0 || page == totalPages - 1 || (page >= currentPage - 2  && page <= currentPage + 2)}">
+                <li class="disabled" th:if="${(page == currentPage - 2 && currentPage > 3) || (page == totalPages - 1 && currentPage < totalPages - 3)}"><a href="javascript:void(0);">...</a></li>
+                <li th:classappend="${currentPage == page ? 'active' : ''}"><a th:href="${page == 0 ? baseUrl : '?page=' + page}" th:text="${page + 1}"></a></li>
+            </th:block>
+        </ul>
+    </div>
+
+    <div th:fragment="errors(fieldName)" th:if="${#fields.hasErrors(fieldName)}">
+        <ul>
+            <li th:each="err : ${#fields.errors(fieldName)}" th:text="${err}"></li>
+        </ul>
+    </div>
+</body>
+</html>

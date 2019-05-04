@@ -2,24 +2,29 @@ package com.github.prominence.carrepair.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @MappedSuperclass
 abstract public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    protected long id;
 
     @NotNull
+    @Size(max = 64)
     @Column(name = "firstName")
-    private String firstName;
+    protected String firstName;
 
+    @Size(max = 64)
     @Column(name = "middleName")
-    private String middleName;
+    protected String middleName;
 
     @NotNull
+    @Size(max = 64)
     @Column(name = "lastName")
-    private String lastName;
+    protected String lastName;
 
     public Person(String firstName, String middleName, String lastName) {
         this.firstName = firstName;
@@ -60,5 +65,21 @@ abstract public class Person {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person person = (Person) o;
+        return id == person.id &&
+                Objects.equals(firstName, person.firstName) &&
+                Objects.equals(middleName, person.middleName) &&
+                Objects.equals(lastName, person.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, middleName, lastName);
     }
 }
