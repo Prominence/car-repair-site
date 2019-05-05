@@ -3,9 +3,12 @@ package com.github.prominence.carrepair.model;
 import com.github.prominence.carrepair.enums.OrderStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
@@ -16,13 +19,14 @@ public class Order {
     private long id;
 
     @NotNull
+    @Size(max = 1024)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // change to LAZY after DTO implementation
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // change to LAZY after DTO implementation
     @JoinColumn(name = "mechanic_id", nullable = false)
     private Mechanic mechanic;
 
@@ -33,6 +37,7 @@ public class Order {
     @Column(name = "finishedOn")
     private LocalDateTime finishedOn;
 
+    @Min(value = 0)
     @Column(name = "totalPrice")
     private BigDecimal totalPrice;
 
@@ -115,5 +120,39 @@ public class Order {
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order)) return false;
+        Order order = (Order) o;
+        return id == order.id &&
+                Objects.equals(description, order.description) &&
+                Objects.equals(client, order.client) &&
+                Objects.equals(mechanic, order.mechanic) &&
+                Objects.equals(createdOn, order.createdOn) &&
+                Objects.equals(finishedOn, order.finishedOn) &&
+                Objects.equals(totalPrice, order.totalPrice) &&
+                Objects.equals(orderStatus, order.orderStatus);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, client, mechanic, createdOn, finishedOn, totalPrice, orderStatus);
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", client=" + client +
+                ", mechanic=" + mechanic +
+                ", createdOn=" + createdOn +
+                ", finishedOn=" + finishedOn +
+                ", totalPrice=" + totalPrice +
+                ", orderStatus='" + orderStatus + '\'' +
+                '}';
     }
 }

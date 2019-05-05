@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{main}">
+<head>
+    <title th:text="#{default.title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 th:text="#{order.title}"></h1>
+
+    <form th:action="'/order/' + ${order.id != null ? 'update/' + order.id : 'create'}" th:object="${order}" method="post">
+        <div class="form-group row">
+            <label for="orderDescription" class="col-sm-2 col-form-label" th:text="#{description.label}"></label>
+            <div class="col-sm-10">
+                <textarea name="description" class="form-control" id="orderDescription" th:field="*{description}" th:errorclass="fieldError" th:value="${order.description}"></textarea>
+                <div th:replace="common::errors('description')"></div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="orderClient" class="col-sm-2 col-form-label" th:text="#{client.label}"></label>
+            <div class="col-sm-10">
+                <select name="client.id" class="form-control" id="orderClient" th:field="*{client.id}" th:errorclass="fieldError" th:value="${order.client.id}">
+                    <option th:each="clientId : ${clientIdsList}" th:value="${clientId}" th:text="${clientId}"></option>
+                </select>
+                <div th:replace="common::errors('client')"></div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="orderMechanic" class="col-sm-2 col-form-label" th:text="#{mechanic.label}"></label>
+            <div class="col-sm-10">
+                <select name="mechanic.id" class="form-control" id="orderMechanic" th:field="*{mechanic.id}" th:errorclass="fieldError" th:value="${order.mechanic.id}">
+                    <option th:each="mechanicId : ${mechanicIdsList}" th:value="${mechanicId}" th:text="${mechanicId}"></option>
+                </select>
+                <div th:replace="common::errors('mechanic')"></div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="orderCreatedOn" class="col-sm-2 col-form-label" th:text="#{createdOn.label}"></label>
+            <div class="col-sm-10">
+                <input type="datetime-local" name="createdOn" class="form-control" id="orderCreatedOn" th:field="*{createdOn}" th:errorclass="fieldError" th:value="${order.createdOn}">
+                <div th:replace="common::errors('createdOn')"></div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="orderFinishedOn" class="col-sm-2 col-form-label" th:text="#{finishedOn.label}"></label>
+            <div class="col-sm-10">
+                <input type="datetime-local" name="finishedOn" class="form-control" id="orderFinishedOn" th:field="*{finishedOn}" th:errorclass="fieldError" th:value="${order.finishedOn}">
+                <div th:replace="common::errors('finishedOn')"></div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="orderTotalPrice" class="col-sm-2 col-form-label" th:text="#{totalPrice.label}"></label>
+            <div class="col-sm-10">
+                <input type="number" name="totalPrice" class="form-control" id="orderTotalPrice" th:field="*{totalPrice}" th:errorclass="fieldError" th:value="${order.totalPrice}">
+                <div th:replace="common::errors('totalPrice')"></div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="orderStatus" class="col-sm-2 col-form-label" th:text="#{status.label}"></label>
+            <div class="col-sm-10">
+                <select name="orderStatus" class="form-control" id="orderStatus" th:field="*{orderStatus}" th:errorclass="fieldError" th:value="${order.orderStatus}">
+                    <option th:each="orderStatus : ${orderStatuses}" th:value="${orderStatus.toString()}" th:text="${{orderStatus}}"></option>
+                </select>
+                <div th:replace="common::errors('orderStatus')"></div>
+            </div>
+        </div>
+        <div class="form-group row pull-right">
+            <div class="col-sm-12">
+                <a href="/order" class="btn btn-default" th:text="#{common.back.button}"></a>
+                <button type="submit" class="btn btn-primary" th:text="#{common.save.button}"></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

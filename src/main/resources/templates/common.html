@@ -16,5 +16,9 @@
             <li th:each="err : ${#fields.errors(fieldName)}" th:text="${err}"></li>
         </ul>
     </div>
+
+    <th:block th:fragment="formatDateTime(dateTime)" th:if="${dateTime != null}">
+        <th:block th:value="${dateTime.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss'))}"/>
+    </th:block>
 </body>
 </html>

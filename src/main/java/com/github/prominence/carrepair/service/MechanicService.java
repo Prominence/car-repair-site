@@ -58,4 +58,12 @@ public class MechanicService {
 
         return statistics;
     }
+
+    public long getMechanicCount() {
+        return mechanicRepository.count();
+    }
+
+    public List<Long> getAllMechanicIds() {
+        return mechanicRepository.findAllMechanicIds();
+    }
 }

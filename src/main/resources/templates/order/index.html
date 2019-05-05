@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{main}">
+<head>
+    <title th:text="#{default.title}"></title>
+
+    <script th:inline="javascript">
+        function deleteOrderById(id) {
+            const confirmationResult = confirm("Are you sure to delete?");
+            if (confirmationResult) {
+                const url = /*[[@{/order/delete/}]]*/;
+
+                $.ajax({
+                    url: url + id,
+                    type: 'DELETE',
+                    success: function () {
+                        $('#order-row-' + id).remove();
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 th:text="#{order.title}"></h1>
+
+    <div  class="pull-right">
+        <a class="btn btn-success" th:href="@{/order/create}" th:text="#{common.create.button}"></a>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th th:text="#{client.label}"></th>
+            <th th:text="#{mechanic.label}"></th>
+            <th th:text="#{description.label}"></th>
+            <th th:text="#{createdOn.label}"></th>
+            <th th:text="#{finishedOn.label}"></th>
+            <th th:text="#{status.label}"></th>
+            <th th:text="#{totalPrice.label}"></th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orderList}" th:id="'order-row-' + ${order.id}">
+            <td th:text="${order.client.firstName + ' ' + order.client.lastName + '(' + order.client.id + ')'}"></td>
+            <td th:text="${order.mechanic.firstName + ' ' + order.mechanic.lastName + '(' + order.mechanic.id + ')'}"></td>
+            <td class="word-breakable" th:text="${T(org.apache.commons.lang3.StringUtils).abbreviate(order.description, 128)}"></td>
+            <td th:text="${{order.createdOn}}"></td>
+            <td th:text="${{order.finishedOn}}"></td>
+            <td th:text="${{order.orderStatus}}"></td>
+            <td th:text="${{order.totalPrice}}"></td>
+            <td style="break-inside: avoid">
+                <div class="btn-group pull-right">
+                    <a th:href="@{/order/edit/{id}(id=${order.id})}" class="btn btn-default" th:text="#{common.edit.button}"></a>
+                    <button type="button" class="btn btn-danger" th:onclick="'deleteOrderById(' + ${order.id} + ')'" th:text="#{common.delete.button}"></button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:replace="common::pagination(@{/order/}, ${page}, ${totalPages})"></div>
+</div>
+
+</body>
+</html>

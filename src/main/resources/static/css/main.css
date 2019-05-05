@@ -4,3 +4,11 @@ body {
 .fieldError {
     border: 1px solid red;
 }
+
+.word-breakable {
+    word-break: break-all;
+}
+
+.btn-group {
+    display: flex;
+}
