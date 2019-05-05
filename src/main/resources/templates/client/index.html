@@ -26,16 +26,16 @@
     <h1 th:text="#{client.title}"></h1>
 
     <div  class="pull-right">
-        <a class="btn btn-success" th:href="@{/client/create}">Create</a>
+        <a class="btn btn-success" th:href="@{/client/create}" th:text="#{common.create.button}"></a>
     </div>
 
     <table class="table table-striped table-hover">
         <thead>
         <tr>
-            <th>First Name</th>
-            <th>Middle Name</th>
-            <th>Last Name</th>
-            <th>Phone No</th>
+            <th th:text="#{firstName.label}"></th>
+            <th th:text="#{middleName.label}"></th>
+            <th th:text="#{lastName.label}"></th>
+            <th th:text="#{phoneNo.label}"></th>
             <th>&nbsp;</th>
         </tr>
         </thead>
@@ -47,8 +47,8 @@
             <td th:text="${client.phoneNo}"></td>
             <td>
                 <div class="btn-group pull-right">
-                    <a th:href="@{/client/edit/{id}(id=${client.id})}" class="btn btn-default">Edit</a>
-                    <button type="button" class="btn btn-danger" th:onclick="'deleteClientById(' + ${client.id} + ')'">Delete</button>
+                    <a th:href="@{/client/edit/{id}(id=${client.id})}" class="btn btn-default" th:text="#{common.edit.button}"></a>
+                    <button type="button" class="btn btn-danger" th:onclick="'deleteClientById(' + ${client.id} + ')'" th:text="#{common.delete.button}"></button>
                 </div>
             </td>
         </tr>

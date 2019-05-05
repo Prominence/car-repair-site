@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{main}">
+<head>
+    <title th:text="#{default.title}"></title>
+
+    <script th:inline="javascript">
+        function deleteMechanicById(id) {
+            const confirmationResult = confirm("Are you sure to delete?");
+            if (confirmationResult) {
+                const url = /*[[@{/mechanic/delete/}]]*/;
+
+                $.ajax({
+                    url: url + id,
+                    type: 'DELETE',
+                    success: function () {
+                        $('#mechanic-row-' + id).remove();
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 th:text="#{mechanic.title}"></h1>
+
+    <div  class="pull-right">
+        <a class="btn btn-success" th:href="@{/mechanic/create}" th:text="#{common.create.button}"></a>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th th:text="#{firstName.label}"></th>
+            <th th:text="#{middleName.label}"></th>
+            <th th:text="#{lastName.label}"></th>
+            <th th:text="#{hourlyPayment.label}"></th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mechanic : ${mechanicList}" th:id="'mechanic-row-' + ${mechanic.id}">
+            <td th:text="${mechanic.firstName}"></td>
+            <td th:text="${mechanic.middleName}"></td>
+            <td th:text="${mechanic.lastName}"></td>
+            <td th:text="${mechanic.hourlyPayment}"></td>
+            <td>
+                <div class="btn-group pull-right">
+                    <a th:href="@{/mechanic/statistics/{id}(id=${mechanic.id})}" class="btn btn-info" th:text="#{showStatistics.button}"></a>
+                    <a th:href="@{/mechanic/edit/{id}(id=${mechanic.id})}" class="btn btn-default" th:text="#{common.edit.button}"></a>
+                    <button type="button" class="btn btn-danger" th:onclick="'deleteMechanicById(' + ${mechanic.id} + ')'" th:text="#{common.delete.button}"></button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:replace="common::pagination(@{/mechanic/}, ${page}, ${totalPages})"></div>
+</div>
+
+</body>
+</html>

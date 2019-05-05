@@ -2,11 +2,14 @@ package com.github.prominence.carrepair.demo;
 
 import com.github.javafaker.Faker;
 import com.github.prominence.carrepair.model.Client;
-import com.github.prominence.carrepair.repository.ClientRepository;
+import com.github.prominence.carrepair.model.Mechanic;
+import com.github.prominence.carrepair.service.ClientService;
+import com.github.prominence.carrepair.service.MechanicService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,10 +18,10 @@ import java.util.stream.Stream;
 public class DemoDataPopulator {
     private static final int COUNT = 10;
 
-    @Bean
-    public CommandLineRunner demoData(ClientRepository clientRepository) {
-        Faker faker = new Faker();
+    private Faker faker = new Faker();
 
+    @Bean
+    public CommandLineRunner clientDemoData(ClientService clientService) {
         List<Client> demoClientList = Stream.generate(() -> {
             Client client = new Client();
             client.setFirstName(faker.name().firstName());
@@ -30,7 +33,24 @@ public class DemoDataPopulator {
         }).limit(COUNT).collect(Collectors.toList());
 
         return args -> {
-            demoClientList.forEach(clientRepository::save);
+            demoClientList.forEach(clientService::save);
+        };
+    }
+
+    @Bean
+    public CommandLineRunner mechanicDemoData(MechanicService mechanicService) {
+        List<Mechanic> demoMechanicList = Stream.generate(() -> {
+            Mechanic mechanic = new Mechanic();
+            mechanic.setFirstName(faker.name().firstName());
+            mechanic.setLastName(faker.name().lastName());
+            mechanic.setMiddleName(faker.name().username());
+            mechanic.setHourlyPayment(BigDecimal.valueOf(faker.number().randomDouble(3, 100, 999)));
+            System.out.println(mechanic); // demo output
+            return mechanic;
+        }).limit(COUNT).collect(Collectors.toList());
+
+        return args -> {
+            demoMechanicList.forEach(mechanicService::save);
         };
     }
 

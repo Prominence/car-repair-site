@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{main}">
+<head>
+    <title th:text="#{default.title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 th:text="#{mechanic.title}"></h1>
+
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th th:text="#{status.label}"></th>
+            <th th:text="#{amount.label}"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="#{status.scheduled.label}"></td>
+            <td th:text="${statistics.get(T(com.github.prominence.carrepair.enums.OrderStatus).SCHEDULED)}"></td>
+        </tr>
+        <tr>
+            <td th:text="#{status.done.label}"></td>
+            <td th:text="${statistics.get(T(com.github.prominence.carrepair.enums.OrderStatus).DONE)}"></td>
+        </tr>
+        <tr>
+            <td th:text="#{status.accepted.label}"></td>
+            <td th:text="${statistics.get(T(com.github.prominence.carrepair.enums.OrderStatus).ACCEPTED)}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="form-group row pull-right">
+        <div class="col-sm-12">
+            <a href="/mechanic" class="btn btn-default" th:text="#{common.back.button}"></a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

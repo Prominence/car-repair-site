@@ -20,7 +20,7 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a th:href="@{/client/}"><th:block th:text="#{badge.clients}"/> <span class="badge" th:text="${clientsCount}"></span></a></li>
-                <li><a href="#"><th:block th:text="#{badge.mechanics}"/> <span class="badge" th:text="${mechanicsCount}"></span></a></li>
+                <li><a th:href="@{/mechanic/}"><th:block th:text="#{badge.mechanics}"/> <span class="badge" th:text="${mechanicsCount}"></span></a></li>
                 <li><a href="#"><th:block th:text="#{badge.orders}"/> <span class="badge" th:text="${ordersCount}"></span></a></li>
             </ul>
         </div>
