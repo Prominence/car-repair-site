@@ -2,11 +2,13 @@ package com.github.prominence.carrepair.controller;
 
 import com.github.prominence.carrepair.enums.OrderStatus;
 import com.github.prominence.carrepair.model.Order;
+import com.github.prominence.carrepair.repository.spec.OrderSpecifications;
 import com.github.prominence.carrepair.service.ClientService;
 import com.github.prominence.carrepair.service.MechanicService;
 import com.github.prominence.carrepair.service.OrderService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,11 +34,14 @@ public class OrderController {
     }
 
     @GetMapping
-    public String index(ModelMap modelMap) {
-        Page<Order> orderList = orderService.findAll((Pageable) modelMap.get("pagination"));
+    public String index(@PageableDefault Pageable pageable, @RequestParam(required = false) String client, @RequestParam(required = false) String description,
+                        @RequestParam(required = false) OrderStatus orderStatus, ModelMap modelMap) {
+
+        Page<Order> orderList = orderService.findAll(OrderSpecifications.search(client, description, orderStatus), pageable);
 
         modelMap.addAttribute("orderList", orderList.getContent());
         modelMap.addAttribute("totalPages", orderList.getTotalPages());
+        modelMap.addAttribute("orderStatuses", OrderStatus.values());
 
         return "order/index";
     }

@@ -6,7 +6,7 @@
 
     <script th:inline="javascript">
         function deleteClientById(id) {
-            const confirmationResult = confirm("Are you sure to delete?");
+            const confirmationResult = confirm(/*[[#{common.deleteConfirmation.label}]]*/);
             if (confirmationResult) {
                 const url = /*[[@{/client/delete/}]]*/;
 
@@ -29,7 +29,7 @@
         <a class="btn btn-success" th:href="@{/client/create}" th:text="#{common.create.button}"></a>
     </div>
 
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover" th:unless="${clientList.isEmpty()}">
         <thead>
         <tr>
             <th th:text="#{firstName.label}"></th>
@@ -54,7 +54,9 @@
         </tr>
         </tbody>
     </table>
-    <div th:replace="common::pagination(@{/client/}, ${page}, ${totalPages})"></div>
+    <div th:if="${clientList.isEmpty()}" th:text="#{common.nothingFound.label}"></div>
+
+    <div th:replace="common::pagination(${totalPages})"></div>
 </div>
 
 </body>

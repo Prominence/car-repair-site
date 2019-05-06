@@ -4,6 +4,7 @@ import com.github.prominence.carrepair.model.Client;
 import com.github.prominence.carrepair.service.ClientService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +26,8 @@ public class ClientController {
     }
 
     @GetMapping
-    public String index(ModelMap modelMap) {
-        Page<Client> clientList = clientService.findAll((Pageable) modelMap.get("pagination"));
+    public String index(@PageableDefault Pageable pageable, ModelMap modelMap) {
+        Page<Client> clientList = clientService.findAll(pageable);
 
         modelMap.addAttribute("clientList", clientList.getContent());
         modelMap.addAttribute("totalPages", clientList.getTotalPages());
