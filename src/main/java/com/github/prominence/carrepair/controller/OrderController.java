@@ -46,7 +46,7 @@ public class OrderController {
         model.addAttribute("order", new Order());
         model.addAttribute("clientIdsList", clientService.getAllClientIds());
         model.addAttribute("mechanicIdsList", mechanicService.getAllMechanicIds());
-        model.addAttribute("orderStatuses", new OrderStatus[] { OrderStatus.SCHEDULED, OrderStatus.DONE, OrderStatus.ACCEPTED });
+        model.addAttribute("orderStatuses", OrderStatus.values());
 
         return "order/edit";
     }
@@ -58,7 +58,7 @@ public class OrderController {
             model.addAttribute("order", orderOptional.get());
             model.addAttribute("clientIdsList", clientService.getAllClientIds());
             model.addAttribute("mechanicIdsList", mechanicService.getAllMechanicIds());
-            model.addAttribute("orderStatuses", new OrderStatus[] { OrderStatus.SCHEDULED, OrderStatus.DONE, OrderStatus.ACCEPTED });
+            model.addAttribute("orderStatuses", OrderStatus.values());
             return "order/edit";
         } else {
             // TODO: need to show warning
@@ -72,7 +72,7 @@ public class OrderController {
             order.setId(id); // why should we do this?
             model.addAttribute("clientIdsList", clientService.getAllClientIds());
             model.addAttribute("mechanicIdsList", mechanicService.getAllMechanicIds());
-            model.addAttribute("orderStatuses", new OrderStatus[] { OrderStatus.SCHEDULED, OrderStatus.DONE, OrderStatus.ACCEPTED });
+            model.addAttribute("orderStatuses", OrderStatus.values());
             return "order/edit";
         }
 
@@ -85,7 +85,7 @@ public class OrderController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("clientIdsList", clientService.getAllClientIds());
             model.addAttribute("mechanicIdsList", mechanicService.getAllMechanicIds());
-            model.addAttribute("orderStatuses", new OrderStatus[] { OrderStatus.SCHEDULED, OrderStatus.DONE, OrderStatus.ACCEPTED });
+            model.addAttribute("orderStatuses", OrderStatus.values());
             return "order/edit";
         }
 
