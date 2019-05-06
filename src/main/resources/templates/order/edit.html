@@ -19,7 +19,7 @@
         <div class="form-group row">
             <label for="orderClient" class="col-sm-2 col-form-label" th:text="#{client.label}"></label>
             <div class="col-sm-10">
-                <select name="client.id" class="form-control" id="orderClient" th:field="*{client.id}" th:errorclass="fieldError" th:value="${order.client.id}">
+                <select name="client.id" class="form-control" id="orderClient" th:field="*{client.id}" th:errorclass="fieldError" th:value="${order.client != null ? order.client.id : null}">
                     <option th:each="clientId : ${clientIdsList}" th:value="${clientId}" th:text="${clientId}"></option>
                 </select>
                 <div th:replace="common::errors('client')"></div>
@@ -28,7 +28,7 @@
         <div class="form-group row">
             <label for="orderMechanic" class="col-sm-2 col-form-label" th:text="#{mechanic.label}"></label>
             <div class="col-sm-10">
-                <select name="mechanic.id" class="form-control" id="orderMechanic" th:field="*{mechanic.id}" th:errorclass="fieldError" th:value="${order.mechanic.id}">
+                <select name="mechanic.id" class="form-control" id="orderMechanic" th:field="*{mechanic.id}" th:errorclass="fieldError" th:value="${order.mechanic != null ? order.mechanic.id : null}">
                     <option th:each="mechanicId : ${mechanicIdsList}" th:value="${mechanicId}" th:text="${mechanicId}"></option>
                 </select>
                 <div th:replace="common::errors('mechanic')"></div>
