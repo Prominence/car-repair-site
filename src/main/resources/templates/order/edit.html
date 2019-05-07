@@ -17,20 +17,20 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="orderClient" class="col-sm-2 col-form-label" th:text="#{client.label}"></label>
+            <label for="orderClient_tmp" class="col-sm-2 col-form-label" th:text="#{client.label}"></label>
             <div class="col-sm-10">
-                <select name="client.id" class="form-control" id="orderClient" th:field="*{client.id}" th:errorclass="fieldError" th:value="${order.client != null ? order.client.id : null}">
-                    <option th:each="clientId : ${clientIdsList}" th:value="${clientId}" th:text="${clientId}"></option>
-                </select>
+                <input type="text" name="client.id_tmp" class="form-control" id="orderClient_tmp"
+                       th:value="${order.client != null ? order.client.firstName + ' ' + order.client.lastName : null}">
+                <input type="hidden" name="client.id" id="orderClient" th:value="${order.client != null ? order.client.id : null}">
                 <div th:replace="common::errors('client')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderMechanic" class="col-sm-2 col-form-label" th:text="#{mechanic.label}"></label>
             <div class="col-sm-10">
-                <select name="mechanic.id" class="form-control" id="orderMechanic" th:field="*{mechanic.id}" th:errorclass="fieldError" th:value="${order.mechanic != null ? order.mechanic.id : null}">
-                    <option th:each="mechanicId : ${mechanicIdsList}" th:value="${mechanicId}" th:text="${mechanicId}"></option>
-                </select>
+                <input type="text" name="mechanic.id_tmp" class="form-control" id="orderMechanic_tmp"
+                       th:value="${order.mechanic != null ? order.mechanic.firstName + ' ' + order.mechanic.lastName : null}">
+                <input type="hidden" name="mechanic.id" id="orderMechanic" th:value="${order.mechanic != null ? order.mechanic.id : null}">
                 <div th:replace="common::errors('mechanic')"></div>
             </div>
         </div>
@@ -71,7 +71,38 @@
             </div>
         </div>
     </form>
+
 </div>
+
+<th:block layout:fragment="scripts">
+    <script src="/webjars/jQuery-Autocomplete/1.4.9/jquery.autocomplete.min.js"></script>
+    <script type="text/javascript">
+        function initializeAutocomplete(entity, inputId) {
+            $('#' + inputId + '_tmp').autocomplete({
+                serviceUrl: '/api/autocomplete/' + entity,
+                paramName: "query",
+                minChars: 3,
+                transformResult: function(response) {
+                    return {
+                        suggestions: $.map($.parseJSON(response), function(item) {
+                            return { value: item.firstName + ' ' + item.lastName, data: item.id};
+                        })
+                    };
+                },
+                onSelect: function (suggestion) {
+                    $('#' + inputId).val(suggestion.data);
+                },
+                onInvalidateSelection: function () {
+                    $('#' + inputId).val('');
+                },
+                showNoSuggestionNotice: true
+            });
+        }
+
+        initializeAutocomplete('client', 'orderClient');
+        initializeAutocomplete('mechanic', 'orderMechanic');
+    </script>
+</th:block>
 
 </body>
 </html>
