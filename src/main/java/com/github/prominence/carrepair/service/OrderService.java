@@ -30,10 +30,6 @@ public class OrderService {
         this.orderValidator = orderValidator;
     }
 
-    public Page<Order> findAll(Pageable pageable) {
-        return orderRepository.findAll(pageable);
-    }
-
     public Page<Order> findAll(Specification<Order> specification, Pageable pageable) {
         return orderRepository.findAll(specification, pageable);
     }

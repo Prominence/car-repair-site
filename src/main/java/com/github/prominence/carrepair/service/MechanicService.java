@@ -63,10 +63,6 @@ public class MechanicService {
         return mechanicRepository.count();
     }
 
-    public List<Long> getAllMechanicIds() {
-        return mechanicRepository.findAllMechanicIds();
-    }
-
     public List<Mechanic> searchByInitials(String query) {
         return mechanicRepository.findAllByInitials(query);
     }

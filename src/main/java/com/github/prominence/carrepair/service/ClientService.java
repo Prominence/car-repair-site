@@ -43,10 +43,6 @@ public class ClientService {
         return clientRepository.count();
     }
 
-    public List<Long> getAllClientIds() {
-        return clientRepository.findAllClientIds();
-    }
-
     public List<Client> searchByInitials(String query) {
         return clientRepository.findAllByInitials(query);
     }

@@ -1,7 +1,7 @@
 package com.github.prominence.carrepair.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
@@ -12,7 +12,7 @@ abstract public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @NotNull
+    @NotBlank
     @Size(max = 64)
     @Column(name = "firstName")
     protected String firstName;
@@ -21,7 +21,7 @@ abstract public class Person {
     @Column(name = "middleName")
     protected String middleName;
 
-    @NotNull
+    @NotBlank
     @Size(max = 64)
     @Column(name = "lastName")
     protected String lastName;

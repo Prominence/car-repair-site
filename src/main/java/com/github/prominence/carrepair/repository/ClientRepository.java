@@ -11,9 +11,6 @@ import java.util.List;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
-    @Query(value = "select c.id from Client c")
-    public List<Long> findAllClientIds();
-
     @Query(value = "select c from Client c where c.firstName like concat('%', :query, '%') or c.middleName like concat('%', :query, '%') or c.lastName like concat('%', :query, '%')")
     public List<Client> findAllByInitials(@Param(value = "query") String query);
 }
