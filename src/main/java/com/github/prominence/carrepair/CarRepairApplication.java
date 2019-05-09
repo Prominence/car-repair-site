@@ -20,4 +20,3 @@ public class CarRepairApplication {
 // TODO: i18n
 // TODO: tests
 // TODO: big data
-// TODO: add autocomplete
