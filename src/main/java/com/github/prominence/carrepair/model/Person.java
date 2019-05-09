@@ -10,7 +10,7 @@ abstract public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected long id;
+    protected Long id;
 
     @NotNull
     @Size(max = 64)

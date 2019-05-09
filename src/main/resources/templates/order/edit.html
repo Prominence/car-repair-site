@@ -3,79 +3,89 @@
       layout:decorate="~{main}">
 <head>
     <title th:text="#{default.title}"></title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap-datetimepicker/2.4.2/css/bootstrap-datetimepicker.min.css"/>
 </head>
 <body>
-<div layout:fragment="content">
+<div layout:fragment="header">
     <h1 th:text="#{order.title}"></h1>
-
+</div>
+<div layout:fragment="content">
     <form th:action="'/order/' + ${order.id != null ? 'update/' + order.id : 'create'}" th:object="${order}" method="post">
         <div class="form-group row">
             <label for="orderDescription" class="col-sm-2 col-form-label" th:text="#{description.label}"></label>
             <div class="col-sm-10">
-                <textarea name="description" class="form-control" id="orderDescription" th:field="*{description}" th:errorclass="fieldError" th:value="${order.description}"></textarea>
+                <textarea name="description" class="form-control" id="orderDescription" th:field="*{description}" th:errorclass="is-invalid" th:value="${order.description}"></textarea>
                 <div th:replace="common::errors('description')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderClient_tmp" class="col-sm-2 col-form-label" th:text="#{client.label}"></label>
-            <div class="col-sm-10">
-                <input type="text" name="client.id_tmp" class="form-control" id="orderClient_tmp"
-                       th:value="${order.client != null ? order.client.firstName + ' ' + order.client.lastName : null}">
-                <input type="hidden" name="client.id" id="orderClient" th:value="${order.client != null ? order.client.id : null}">
+            <div class="input-group col-sm-10" th:with="client=${order.client}, clientInitials=${(client != null && client.id != null) ? (client.firstName+ ' ' + client.lastName) : null}">
+                <span class="input-group-prepend input-group-text" id="orderClientPlaceholder" th:text="${clientInitials}"></span>
+                <input type="text" name="clientId_tmp" class="form-control" id="orderClient_tmp" th:classappend="${#fields.hasErrors('client') ? 'is-invalid' : null}">
+                <input type="hidden" name="clientId" id="orderClient" th:value="${client != null && client.id != null ? client.id : ''}">
                 <div th:replace="common::errors('client')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderMechanic" class="col-sm-2 col-form-label" th:text="#{mechanic.label}"></label>
-            <div class="col-sm-10">
-                <input type="text" name="mechanic.id_tmp" class="form-control" id="orderMechanic_tmp"
-                       th:value="${order.mechanic != null ? order.mechanic.firstName + ' ' + order.mechanic.lastName : null}">
-                <input type="hidden" name="mechanic.id" id="orderMechanic" th:value="${order.mechanic != null ? order.mechanic.id : null}">
+            <div class="input-group col-sm-10" th:with="mechanic=${order.mechanic}, mechanicInitials=${(mechanic != null && mechanic.id != null) ? (mechanic.firstName+ ' ' + mechanic.lastName) : null}">
+                <span class="input-group-prepend input-group-text" id="orderMechanicPlaceholder" th:text="${mechanicInitials}"></span>
+                <input type="text" name="mechanicId_tmp" class="form-control" id="orderMechanic_tmp" th:classappend="${#fields.hasErrors('mechanic') ? 'is-invalid' : null}">
+                <input type="hidden" name="mechanicId" id="orderMechanic" th:value="${mechanic != null && mechanic.id != null ? mechanic.id : ''}">
                 <div th:replace="common::errors('mechanic')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderCreatedOn" class="col-sm-2 col-form-label" th:text="#{createdOn.label}"></label>
-            <div class="col-sm-10">
-                <input type="datetime-local" name="createdOn" class="form-control" id="orderCreatedOn" th:field="*{createdOn}" th:errorclass="fieldError" th:value="${order.createdOn}">
+            <div class="input-group col-sm-10">
+                <input type="datetime-local" name="createdOn" class="form-control" id="orderCreatedOn" th:field="*{createdOn}" th:errorclass="is-invalid" th:value="${order.createdOn}">
+                <span class="input-group-append input-group-text">
+                    <i class="far fa-calendar"></i>
+                </span>
                 <div th:replace="common::errors('createdOn')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderFinishedOn" class="col-sm-2 col-form-label" th:text="#{finishedOn.label}"></label>
-            <div class="col-sm-10">
-                <input type="datetime-local" name="finishedOn" class="form-control" id="orderFinishedOn" th:field="*{finishedOn}" th:errorclass="fieldError" th:value="${order.finishedOn}">
+            <div class="input-group col-sm-10">
+                <input type="datetime-local" name="finishedOn" class="form-control" id="orderFinishedOn" th:field="*{finishedOn}" th:errorclass="is-invalid" th:value="${order.finishedOn}">
+                <span class="input-group-append input-group-text">
+                    <i class="far fa-calendar"></i>
+                </span>
                 <div th:replace="common::errors('finishedOn')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderTotalPrice" class="col-sm-2 col-form-label" th:text="#{totalPrice.label}"></label>
-            <div class="col-sm-10">
-                <input type="number" name="totalPrice" class="form-control" id="orderTotalPrice" th:field="*{totalPrice}" th:errorclass="fieldError" th:value="${order.totalPrice}">
+            <div class="input-group col-sm-10">
+                <input type="number" name="totalPrice" class="form-control" id="orderTotalPrice" th:field="*{totalPrice}" th:errorclass="is-invalid" th:value="${order.totalPrice}">
+                <span class="input-group-append input-group-text">EUR</span>
                 <div th:replace="common::errors('totalPrice')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderStatus" class="col-sm-2 col-form-label" th:text="#{status.label}"></label>
             <div class="col-sm-10">
-                <select name="orderStatus" class="form-control" id="orderStatus" th:field="*{orderStatus}" th:errorclass="fieldError" th:value="${order.orderStatus}">
+                <select name="orderStatus" class="form-control custom-select" id="orderStatus" th:field="*{orderStatus}" th:errorclass="is-invalid" th:value="${order.orderStatus}">
                     <option th:each="orderStatus : ${orderStatuses}" th:value="${orderStatus.toString()}" th:text="${{orderStatus}}"></option>
                 </select>
                 <div th:replace="common::errors('orderStatus')"></div>
             </div>
         </div>
-        <div class="form-group row pull-right">
+        <div class="form-group row float-right">
             <div class="col-sm-12">
-                <a href="/order" class="btn btn-default" th:text="#{common.back.button}"></a>
+                <a href="/order" class="btn btn-secondary" th:text="#{common.back.button}"></a>
                 <button type="submit" class="btn btn-primary" th:text="#{common.save.button}"></button>
             </div>
         </div>
     </form>
-
 </div>
 
 <th:block layout:fragment="scripts">
     <script src="/webjars/jQuery-Autocomplete/1.4.9/jquery.autocomplete.min.js"></script>
+    <script src="/webjars/bootstrap-datetimepicker/2.4.2/js/bootstrap-datetimepicker.min.js"></script>
+
     <script type="text/javascript">
         function initializeAutocomplete(entity, inputId) {
             $('#' + inputId + '_tmp').autocomplete({
@@ -91,16 +101,24 @@
                 },
                 onSelect: function (suggestion) {
                     $('#' + inputId).val(suggestion.data);
-                },
-                onInvalidateSelection: function () {
-                    $('#' + inputId).val('');
+                    $('#' + inputId + 'Placeholder').text(suggestion.value);
+                    $('#' + inputId + '_tmp').val('');
                 },
                 showNoSuggestionNotice: true
             });
         }
 
+        function initializeDatetimePicker(field) {
+            $('#' + field).datetimepicker({
+                format: 'yyyy-mm-dd hh:mm:ss'
+            });
+        }
+
         initializeAutocomplete('client', 'orderClient');
         initializeAutocomplete('mechanic', 'orderMechanic');
+
+        initializeDatetimePicker('orderCreatedOn');
+        initializeDatetimePicker('orderFinishedOn');
     </script>
 </th:block>
 

@@ -7,52 +7,60 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title th:text="#{default.title}">"</title>
     <!-- Common styles and scripts -->
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.4.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/webjars/font-awesome/5.8.1/css/fontawesome.min.css"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 </head>
 <body>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" th:href="@{/}" th:text="#{default.title}"></a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a th:href="@{/client/}"><th:block th:text="#{badge.clients}"/> <span class="badge" th:text="${clientsCount}"></span></a></li>
-                <li><a th:href="@{/mechanic/}"><th:block th:text="#{badge.mechanics}"/> <span class="badge" th:text="${mechanicsCount}"></span></a></li>
-                <li><a th:href="@{/order/}"><th:block th:text="#{badge.orders}"/> <span class="badge" th:text="${ordersCount}"></span></a></li>
+        <a class="navbar-brand" th:href="@{/}" th:text="#{default.title}"></a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/client/}">
+                        <th:block th:text="#{badge.clients}"/> <span class="badge badge-light" th:text="${clientsCount}"></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/mechanic/}">
+                        <th:block th:text="#{badge.mechanics}"/> <span class="badge badge-light" th:text="${mechanicsCount}"></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/order/}">
+                        <th:block th:text="#{badge.orders}"/> <span class="badge badge-light" th:text="${ordersCount}"></span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
+<br/>
+
 <div class="container">
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-header">
+            <div layout:fragment="header">
+
+            </div>
+        </div>
+        <div class="card-body">
             <div layout:fragment="content">
 
             </div>
         </div>
+        <div class="card-footer">
+            &copy 2019 <th:block th:text="#{default.title}"/>, Alexey Zinchenko
+        </div>
     </div>
 </div>
 
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-body">
-
-                    &copy 2019 <th:block th:text="#{default.title}"/>, Alexey Zinchenko
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-
 <th:block>
-    <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="/webjars/jquery/3.4.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <th:block layout:fragment="scripts">
 
     </th:block>

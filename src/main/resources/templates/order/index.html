@@ -22,45 +22,44 @@
     </script>
 </head>
 <body>
-<div layout:fragment="content">
+<div layout:fragment="header">
     <h1 th:text="#{order.title}"></h1>
-
-    <div class="row">
-        <form>
-            <div class="form-row">
-                <div class="col-md-4">
-                    <label for="clientSearchInput" th:text="#{client.label}"></label>
-                    <input type="text" class="form-control" name="client" id="clientSearchInput" th:value="${#request.getParameter('client')}" />
-                </div>
-                <div class="col-md-4">
-                    <label for="descriptionSearchInput" th:text="#{description.label}"></label>
-                    <input type="text" class="form-control" name="description" id="descriptionSearchInput" th:value="${#request.getParameter('description')}" />
-                </div>
-                <div class="col-md-4">
-                    <label for="statusSearchInput" th:text="#{status.label}"></label>
-                    <select class="form-control" th:name="orderStatus" id="statusSearchInput">
-                        <option value=""></option>
-                        <option th:each="orderStatus : ${orderStatuses}" th:value="${orderStatus.toString()}" th:text="${{orderStatus}}"
-                                th:selected="${#request.getParameter('orderStatus') == orderStatus.toString()}"></option>
-                    </select>
-                </div>
+</div>
+<div layout:fragment="content">
+    <form class="mb-5 pb-3">
+        <div class="form-row">
+            <div class="col-md-4">
+                <label for="clientSearchInput" th:text="#{client.label}"></label>
+                <input type="text" class="form-control" name="client" id="clientSearchInput" th:value="${#request.getParameter('client')}" />
             </div>
-            <div class="form-row pull-right">
-                <br/>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary" th:text="#{common.search.button}"></button>
-                </div>
+            <div class="col-md-4">
+                <label for="descriptionSearchInput" th:text="#{description.label}"></label>
+                <input type="text" class="form-control" name="description" id="descriptionSearchInput" th:value="${#request.getParameter('description')}" />
             </div>
-        </form>
-    </div>
+            <div class="col-md-4">
+                <label for="statusSearchInput" th:text="#{status.label}"></label>
+                <select class="form-control" th:name="orderStatus" id="statusSearchInput">
+                    <option value=""></option>
+                    <option th:each="orderStatus : ${orderStatuses}" th:value="${orderStatus.toString()}" th:text="${{orderStatus}}"
+                            th:selected="${#request.getParameter('orderStatus') == orderStatus.toString()}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row float-right mt-2">
+            <br/>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary" th:text="#{common.search.button}"></button>
+            </div>
+        </div>
+    </form>
 
     <hr/>
 
-    <div class="pull-right">
+    <div class="float-right mb-3">
         <a class="btn btn-success" th:href="@{/order/create}" th:text="#{common.create.button}"></a>
     </div>
 
-    <table class="table table-striped table-hover" th:unless="${orderList.isEmpty()}">
+    <table class="table" th:unless="${orderList.isEmpty()}">
         <thead>
         <tr>
             <th th:text="#{client.label}"></th>
@@ -84,7 +83,7 @@
             <td th:text="${{order.totalPrice}}"></td>
             <td style="break-inside: avoid">
                 <div class="btn-group pull-right">
-                    <a th:href="@{/order/edit/{id}(id=${order.id})}" class="btn btn-default" th:text="#{common.edit.button}"></a>
+                    <a th:href="@{/order/edit/{id}(id=${order.id})}" class="btn btn-secondary" th:text="#{common.edit.button}"></a>
                     <button type="button" class="btn btn-danger" th:onclick="'deleteOrderById(' + ${order.id} + ')'" th:text="#{common.delete.button}"></button>
                 </div>
             </td>

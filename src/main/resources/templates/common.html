@@ -3,23 +3,23 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
     <div th:fragment="pagination(totalPages)" th:with="currentPage=${T(Integer).parseInt(#request.getParameter('page') ?: 0)}">
-        <ul class="pagination pagination-small" th:if="${totalPages > 1}" th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}">
+        <ul class="pagination justify-content-center" th:if="${totalPages > 1}" th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}">
             <th:block th:each="page : ${#numbers.sequence(0, totalPages - 1, 1)}" th:if="${page == 0 || page == totalPages - 1 || (page >= currentPage - 2  && page <= currentPage + 2)}">
-                <li class="disabled" th:if="${(page == currentPage - 2 && currentPage > 3) || (page == totalPages - 1 && currentPage < totalPages - 3)}">
-                    <a href="javascript:void(0);">...</a>
+                <li class="page-item disabled" th:if="${(page == currentPage - 2 && currentPage > 3) || (page == totalPages - 1 && currentPage < totalPages - 3)}">
+                    <a class="page-link" href="javascript:void(0);">...</a>
                 </li>
-                <li th:classappend="${currentPage == page ? 'active' : ''}">
-                    <a th:href="${urlBuilder.replaceQueryParam('page', page).toUriString()}" th:text="${page + 1}"></a>
+                <li class="page-item" th:classappend="${currentPage == page ? 'active' : ''}">
+                    <a class="page-link" th:href="${urlBuilder.replaceQueryParam('page', page).toUriString()}" th:text="${page + 1}"></a>
                 </li>
             </th:block>
         </ul>
     </div>
 
-    <div th:fragment="errors(fieldName)" th:if="${#fields.hasErrors(fieldName)}">
+    <small class="invalid-feedback" th:fragment="errors(fieldName)" th:if="${#fields.hasErrors(fieldName)}">
         <ul>
             <li th:each="err : ${#fields.errors(fieldName)}" th:text="${err}"></li>
         </ul>
-    </div>
+    </small>
 
     <th:block th:fragment="formatDateTime(dateTime)" th:if="${dateTime != null}">
         <th:block th:value="${dateTime.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss'))}"/>

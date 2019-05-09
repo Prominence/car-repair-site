@@ -22,10 +22,11 @@
     </script>
 </head>
 <body>
-<div layout:fragment="content">
+<div layout:fragment="header">
     <h1 th:text="#{client.title}"></h1>
-
-    <div  class="pull-right">
+</div>
+<div layout:fragment="content">
+    <div class="float-right mb-3">
         <a class="btn btn-success" th:href="@{/client/create}" th:text="#{common.create.button}"></a>
     </div>
 
@@ -47,7 +48,7 @@
             <td th:text="${client.phoneNo}"></td>
             <td>
                 <div class="btn-group pull-right">
-                    <a th:href="@{/client/edit/{id}(id=${client.id})}" class="btn btn-default" th:text="#{common.edit.button}"></a>
+                    <a th:href="@{/client/edit/{id}(id=${client.id})}" class="btn btn-secondary" th:text="#{common.edit.button}"></a>
                     <button type="button" class="btn btn-danger" th:onclick="'deleteClientById(' + ${client.id} + ')'" th:text="#{common.delete.button}"></button>
                 </div>
             </td>

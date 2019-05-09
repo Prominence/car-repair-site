@@ -14,9 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -26,17 +26,18 @@ public class OrderController {
     private OrderService orderService;
     private ClientService clientService;
     private MechanicService mechanicService;
+    private SmartValidator smartValidator;
 
-    public OrderController(OrderService orderService, ClientService clientService, MechanicService mechanicService) {
+    public OrderController(OrderService orderService, ClientService clientService, MechanicService mechanicService, SmartValidator smartValidator) {
         this.orderService = orderService;
         this.clientService = clientService;
         this.mechanicService = mechanicService;
+        this.smartValidator = smartValidator;
     }
 
     @GetMapping
     public String index(@PageableDefault Pageable pageable, @RequestParam(required = false) String client, @RequestParam(required = false) String description,
                         @RequestParam(required = false) OrderStatus orderStatus, ModelMap modelMap) {
-
         Page<Order> orderList = orderService.findAll(OrderSpecifications.search(client, description, orderStatus), pageable);
 
         modelMap.addAttribute("orderList", orderList.getContent());
@@ -61,8 +62,6 @@ public class OrderController {
         Optional<Order> orderOptional = orderService.findById(id);
         if (orderOptional.isPresent()) {
             model.addAttribute("order", orderOptional.get());
-            model.addAttribute("clientIdsList", clientService.getAllClientIds());
-            model.addAttribute("mechanicIdsList", mechanicService.getAllMechanicIds());
             model.addAttribute("orderStatuses", OrderStatus.values());
             return "order/edit";
         } else {
@@ -72,11 +71,16 @@ public class OrderController {
     }
 
     @PostMapping(value = "/update/{id}")
-    public String update(@Valid Order order, BindingResult bindingResult, @PathVariable long id, Model model) {
+    public String update(Order order, BindingResult bindingResult, @PathVariable long id, Long clientId, Long mechanicId, Model model) {
+        if (clientId != null) {
+            clientService.findById(clientId).ifPresent(order::setClient);
+        }
+        if (mechanicId != null) {
+            mechanicService.findById(mechanicId).ifPresent(order::setMechanic);
+        }
+        smartValidator.validate(order, bindingResult);
         if (bindingResult.hasErrors()) {
             order.setId(id); // why should we do this?
-            model.addAttribute("clientIdsList", clientService.getAllClientIds());
-            model.addAttribute("mechanicIdsList", mechanicService.getAllMechanicIds());
             model.addAttribute("orderStatuses", OrderStatus.values());
             return "order/edit";
         }
@@ -86,10 +90,15 @@ public class OrderController {
     }
 
     @PostMapping(value = "/create")
-    public String save(@Valid Order order, BindingResult bindingResult, Model model) {
+    public String save(Order order, BindingResult bindingResult, Long clientId, Long mechanicId, Model model) {
+        if (clientId != null) {
+            clientService.findById(clientId).ifPresent(order::setClient);
+        }
+        if (mechanicId != null) {
+            mechanicService.findById(mechanicId).ifPresent(order::setMechanic);
+        }
+        smartValidator.validate(order, bindingResult);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("clientIdsList", clientService.getAllClientIds());
-            model.addAttribute("mechanicIdsList", mechanicService.getAllMechanicIds());
             model.addAttribute("orderStatuses", OrderStatus.values());
             return "order/edit";
         }

@@ -16,16 +16,18 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     @Size(max = 1024)
     private String description;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER) // change to LAZY after DTO implementation
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER) // change to LAZY after DTO implementation
     @JoinColumn(name = "mechanic_id", nullable = false)
     private Mechanic mechanic;
@@ -58,11 +60,11 @@ public class Order {
     public Order() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
