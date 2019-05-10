@@ -47,7 +47,7 @@
             <td th:text="${mechanic.lastName}"></td>
             <td th:text="${mechanic.hourlyPayment}"></td>
             <td>
-                <div class="btn-group pull-right">
+                <div class="btn-group float-right">
                     <a th:href="@{/mechanic/statistics/{id}(id=${mechanic.id})}" class="btn btn-info" th:text="#{showStatistics.button}"></a>
                     <a th:href="@{/mechanic/edit/{id}(id=${mechanic.id})}" class="btn btn-secondary" th:text="#{common.edit.button}"></a>
                     <button type="button" class="btn btn-danger" th:onclick="'deleteMechanicById(' + ${mechanic.id} + ')'" th:text="#{common.delete.button}"></button>

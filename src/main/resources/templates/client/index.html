@@ -47,7 +47,7 @@
             <td th:text="${client.lastName}"></td>
             <td th:text="${client.phoneNo}"></td>
             <td>
-                <div class="btn-group pull-right">
+                <div class="btn-group float-right">
                     <a th:href="@{/client/edit/{id}(id=${client.id})}" class="btn btn-secondary" th:text="#{common.edit.button}"></a>
                     <button type="button" class="btn btn-danger" th:onclick="'deleteClientById(' + ${client.id} + ')'" th:text="#{common.delete.button}"></button>
                 </div>
