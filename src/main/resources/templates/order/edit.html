@@ -95,7 +95,12 @@
                 transformResult: function(response) {
                     return {
                         suggestions: $.map($.parseJSON(response), function(item) {
-                            return { value: item.firstName + ' ' + item.lastName, data: item.id};
+                            var value = item.firstName;
+                            if (item.middleName) {
+                                value += (' ' + item.middleName);
+                            }
+                            value += (' ' + item.lastName)
+                            return { value: value, data: item.id};
                         })
                     };
                 },
