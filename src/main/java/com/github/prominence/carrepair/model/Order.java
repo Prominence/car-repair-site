@@ -23,12 +23,12 @@ public class Order {
     private String description;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER) // change to LAZY after DTO implementation
+    @ManyToOne(fetch = FetchType.EAGER, optional = false) // change to LAZY after DTO implementation
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER) // change to LAZY after DTO implementation
+    @ManyToOne(fetch = FetchType.EAGER, optional = false) // change to LAZY after DTO implementation
     @JoinColumn(name = "mechanic_id", nullable = false)
     private Mechanic mechanic;
 
