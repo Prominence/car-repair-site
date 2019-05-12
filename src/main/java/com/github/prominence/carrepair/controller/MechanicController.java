@@ -3,6 +3,8 @@ package com.github.prominence.carrepair.controller;
 import com.github.prominence.carrepair.enums.OrderStatus;
 import com.github.prominence.carrepair.model.Mechanic;
 import com.github.prominence.carrepair.service.MechanicService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/mechanic")
 public class MechanicController {
+    private static final Logger logger = LogManager.getLogger(MechanicController.class);
 
     private MechanicService mechanicService;
 
@@ -29,16 +32,18 @@ public class MechanicController {
 
     @GetMapping
     public String index(@PageableDefault Pageable pageable, ModelMap modelMap) {
-        Page<Mechanic> clientList = mechanicService.findAll(pageable);
+        Page<Mechanic> mechanicList = mechanicService.findAll(pageable);
+        logger.trace("Request to open list page for Mechanics. Returning {} page.", () -> pageable.getPageNumber() + 1);
 
-        modelMap.addAttribute("mechanicList", clientList.getContent());
-        modelMap.addAttribute("totalPages", clientList.getTotalPages());
+        modelMap.addAttribute("mechanicList", mechanicList.getContent());
+        modelMap.addAttribute("totalPages", mechanicList.getTotalPages());
 
         return "mechanic/index";
     }
 
     @GetMapping(value = "/create")
     public String create(Model model) {
+        logger.trace("Request to open create page for Mechanic.");
         model.addAttribute("mechanic", new Mechanic());
 
         return "mechanic/edit";
@@ -46,41 +51,45 @@ public class MechanicController {
 
     @GetMapping(value = "/edit/{id}")
     public String edit(@PathVariable Long id, Model model) {
-        Optional<Mechanic> clientOptional = mechanicService.findById(id);
-        if (clientOptional.isPresent()) {
-            model.addAttribute("mechanic", clientOptional.get());
+        logger.trace("Request to open edit page for Mechanic[{}].", () -> id);
+        Optional<Mechanic> mechanicOptional = mechanicService.findById(id);
+        if (mechanicOptional.isPresent()) {
+            model.addAttribute("mechanic", mechanicOptional.get());
             return "mechanic/edit";
         } else {
-            // TODO: need to show warning
             return "redirect:/mechanic";
         }
     }
 
     @PostMapping(value = "/update/{id}")
-    public String update(@Valid Mechanic client, BindingResult bindingResult, @PathVariable long id) {
+    public String update(@Valid Mechanic mechanic, BindingResult bindingResult, @PathVariable long id) {
+        logger.trace("Request to save {}.", () -> mechanic);
         if (bindingResult.hasErrors()) {
-            client.setId(id); // why should we do this?
+            logger.trace("{} has validation {} errors and won't be saved.", () -> mechanic, bindingResult::getErrorCount);
+            mechanic.setId(id); // why should we do this?
             return "mechanic/edit";
         }
 
-        mechanicService.save(client);
+        mechanicService.save(mechanic);
         return "redirect:/mechanic";
     }
 
     @PostMapping(value = "/create")
-    public String save(@Valid Mechanic client, BindingResult bindingResult) {
+    public String save(@Valid Mechanic mechanic, BindingResult bindingResult) {
+        logger.trace("Request to create {}.", () -> mechanic);
         if (bindingResult.hasErrors()) {
+            logger.trace("{} has validation {} errors and won't be created.", () -> mechanic, bindingResult::getErrorCount);
             return "mechanic/edit";
         }
 
-        mechanicService.save(client);
+        mechanicService.save(mechanic);
         return "redirect:/mechanic";
     }
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
+        logger.trace("Request to delete Mechanic[{}].", () -> id);
         boolean deleteSuccess = mechanicService.deleteMechanicById(id);
-
         if (deleteSuccess) {
             return ResponseEntity.ok().build();
         } else {
@@ -90,6 +99,7 @@ public class MechanicController {
 
     @GetMapping(value = "/statistics/{id}")
     public String statistics(@PathVariable Long id, Model model) {
+        logger.trace("Request to open statistics for Mechanic[{}].", () -> id);
         Map<OrderStatus, Integer> mechanicStatistics = mechanicService.getOrderStatistics(id);
         model.addAttribute("statistics", mechanicStatistics);
 

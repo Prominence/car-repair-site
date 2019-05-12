@@ -9,6 +9,8 @@ import com.github.prominence.carrepair.service.ClientService;
 import com.github.prominence.carrepair.service.MechanicService;
 import com.github.prominence.carrepair.service.OrderService;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
@@ -26,8 +28,10 @@ import java.util.stream.Stream;
 @Component
 public class DemoDataPopulator {
     private static final int COUNT = 100;
+    private static final int DEFAULT_PAGE_SIZE = 10;
+    private final Logger logger = LogManager.getLogger(DemoDataPopulator.class);
 
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
 
     @Bean
     public CommandLineRunner clientDemoData(ClientService clientService) {
@@ -37,9 +41,9 @@ public class DemoDataPopulator {
             client.setLastName(faker.name().lastName());
             client.setMiddleName(faker.name().username());
             client.setPhoneNo(faker.phoneNumber().phoneNumber());
-            System.out.println(client); // demo output
             return client;
         }).limit(COUNT).collect(Collectors.toList());
+        logger.info("[Demo Data] Populated {} clients.", demoClientList::size);
 
         return args -> demoClientList.forEach(clientService::save);
     }
@@ -52,9 +56,9 @@ public class DemoDataPopulator {
             mechanic.setLastName(faker.name().lastName());
             mechanic.setMiddleName(faker.name().username());
             mechanic.setHourlyPayment(BigDecimal.valueOf(faker.number().randomDouble(3, 100, 999)));
-            System.out.println(mechanic); // demo output
             return mechanic;
         }).limit(COUNT).collect(Collectors.toList());
+        logger.info("[Demo Data] Populated {} mechanics.", demoMechanicList::size);
 
         return args -> demoMechanicList.forEach(mechanicService::save);
     }
@@ -80,22 +84,22 @@ public class DemoDataPopulator {
             final Client randomClient = clientListSlice.get(RandomUtils.nextInt(0, clientListSlice.size()));
             order.setClient(randomClient);
 
-            final List<Mechanic> mechanicListSlise = mechanicService.findAll(getRandomPageable(mechanicsCount)).getContent();
-            final Mechanic randomMechanic = mechanicListSlise.get(RandomUtils.nextInt(0, mechanicListSlise.size()));
+            final List<Mechanic> mechanicListSlice = mechanicService.findAll(getRandomPageable(mechanicsCount)).getContent();
+            final Mechanic randomMechanic = mechanicListSlice.get(RandomUtils.nextInt(0, mechanicListSlice.size()));
             order.setMechanic(randomMechanic);
 
-            System.out.println(order); // demo output
             return order;
         }).limit(COUNT).collect(Collectors.toList());
+        logger.info("[Demo Data] Populated {} orders.", demoOrderList::size);
 
         return args -> demoOrderList.forEach(orderService::save);
     }
 
     private Pageable getRandomPageable(long totalRecords) {
-        final int size = 10;
-        final int totalPages = (int) (totalRecords / size);
-
-        return PageRequest.of(RandomUtils.nextInt(0, totalPages), size);
+        final int totalPages = (int) (totalRecords / DEFAULT_PAGE_SIZE);
+        final PageRequest pageRequest = PageRequest.of(RandomUtils.nextInt(0, totalPages), DEFAULT_PAGE_SIZE);
+        logger.trace("[Demo Data] Random page: {}", () -> pageRequest);
+        return pageRequest;
     }
 
 }
