@@ -15,7 +15,6 @@ public class CarRepairApplication {
     }
 
 }
-// TODO: logging
 // TODO: DTO
 // TODO: i18n
 // TODO: tests
