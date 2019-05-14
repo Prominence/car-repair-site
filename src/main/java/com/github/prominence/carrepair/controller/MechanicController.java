@@ -1,7 +1,8 @@
 package com.github.prominence.carrepair.controller;
 
 import com.github.prominence.carrepair.enums.OrderStatus;
-import com.github.prominence.carrepair.model.Mechanic;
+import com.github.prominence.carrepair.model.domain.Mechanic;
+import com.github.prominence.carrepair.model.dto.MechanicDto;
 import com.github.prominence.carrepair.service.MechanicService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +33,7 @@ public class MechanicController {
 
     @GetMapping
     public String index(@PageableDefault Pageable pageable, ModelMap modelMap) {
-        Page<Mechanic> mechanicList = mechanicService.findAll(pageable);
+        Page<MechanicDto> mechanicList = mechanicService.convertToDtoPage(mechanicService.findAll(pageable));
         logger.trace("Request to open list page for Mechanics. Returning {} page.", () -> pageable.getPageNumber() + 1);
 
         modelMap.addAttribute("mechanicList", mechanicList.getContent());
@@ -44,7 +45,7 @@ public class MechanicController {
     @GetMapping(value = "/create")
     public String create(Model model) {
         logger.trace("Request to open create page for Mechanic.");
-        model.addAttribute("mechanic", new Mechanic());
+        model.addAttribute("mechanicDto", new MechanicDto());
 
         return "mechanic/edit";
     }
@@ -54,7 +55,7 @@ public class MechanicController {
         logger.trace("Request to open edit page for Mechanic[{}].", () -> id);
         Optional<Mechanic> mechanicOptional = mechanicService.findById(id);
         if (mechanicOptional.isPresent()) {
-            model.addAttribute("mechanic", mechanicOptional.get());
+            model.addAttribute("mechanicDto", mechanicService.convertToDto(mechanicOptional.get()));
             return "mechanic/edit";
         } else {
             return "redirect:/mechanic";
@@ -62,10 +63,10 @@ public class MechanicController {
     }
 
     @PostMapping(value = "/update/{id}")
-    public String update(@Valid Mechanic mechanic, BindingResult bindingResult, @PathVariable long id) {
+    public String update(@Valid MechanicDto mechanic, BindingResult bindingResult, @PathVariable long id) {
         logger.trace("Request to save {}.", () -> mechanic);
         if (bindingResult.hasErrors()) {
-            logger.trace("{} has validation {} errors and won't be saved.", () -> mechanic, bindingResult::getErrorCount);
+            logger.trace("{} has {} validation errors and won't be saved.", () -> mechanic, bindingResult::getErrorCount);
             mechanic.setId(id); // why should we do this?
             return "mechanic/edit";
         }
@@ -75,10 +76,10 @@ public class MechanicController {
     }
 
     @PostMapping(value = "/create")
-    public String save(@Valid Mechanic mechanic, BindingResult bindingResult) {
+    public String save(@Valid MechanicDto mechanic, BindingResult bindingResult) {
         logger.trace("Request to create {}.", () -> mechanic);
         if (bindingResult.hasErrors()) {
-            logger.trace("{} has validation {} errors and won't be created.", () -> mechanic, bindingResult::getErrorCount);
+            logger.trace("{} has {} validation errors and won't be created.", () -> mechanic, bindingResult::getErrorCount);
             return "mechanic/edit";
         }
 

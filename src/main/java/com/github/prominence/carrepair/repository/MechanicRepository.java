@@ -1,6 +1,6 @@
 package com.github.prominence.carrepair.repository;
 
-import com.github.prominence.carrepair.model.Mechanic;
+import com.github.prominence.carrepair.model.domain.Mechanic;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

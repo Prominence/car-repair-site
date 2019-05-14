@@ -1,10 +1,13 @@
 package com.github.prominence.carrepair.service;
 
-import com.github.prominence.carrepair.model.Client;
+import com.github.prominence.carrepair.model.domain.Client;
+import com.github.prominence.carrepair.model.dto.ClientDto;
+import com.github.prominence.carrepair.model.mapper.ClientMapper;
 import com.github.prominence.carrepair.repository.ClientRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +19,16 @@ public class ClientService {
     private static final Logger logger = LogManager.getLogger(ClientService.class);
 
     private ClientRepository clientRepository;
+    private ClientMapper clientMapper;
 
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, ClientMapper clientMapper) {
         this.clientRepository = clientRepository;
+        this.clientMapper = clientMapper;
     }
 
     public Page<Client> findAll(Pageable pageable) {
         final Page<Client> clientPage = clientRepository.findAll(pageable);
-        logger.trace(clientPage);
+        logger.trace("Original page: {}.", () -> clientPage);
         return clientPage;
     }
 
@@ -37,6 +42,10 @@ public class ClientService {
         final Client clientToSave = clientRepository.save(client);
         logger.trace("[{}] was saved.", () -> clientToSave);
         return clientToSave;
+    }
+
+    public Client save(ClientDto clientDto) {
+        return save(clientMapper.clientDtoToClient(clientDto));
     }
 
     public boolean deleteClientById(Long id) {
@@ -60,5 +69,20 @@ public class ClientService {
         final List<Client> allByInitials = clientRepository.findAllByInitials(query);
         logger.debug("Found {} clients by initials: {}.", allByInitials::size, () -> query);
         return allByInitials;
+    }
+
+    public Page<ClientDto> convertToDtoPage(Page<Client> clientPage) {
+        final Page<ClientDto> clientDtoPage = new PageImpl<> (clientMapper.clientsToClientDtoList(clientPage.getContent()),
+                clientPage.getPageable(), clientPage.getTotalElements());
+        logger.trace("Dto page: {}.", () -> clientDtoPage);
+        return clientDtoPage;
+    }
+
+    public ClientDto convertToDto(Client client) {
+        return clientMapper.clientToClientDto(client);
+    }
+
+    public List<ClientDto> convertToDtoList(List<Client> clientList) {
+        return clientMapper.clientsToClientDtoList(clientList);
     }
 }

@@ -1,8 +1,6 @@
-package com.github.prominence.carrepair.model;
+package com.github.prominence.carrepair.model.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -12,18 +10,13 @@ abstract public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @NotBlank
-    @Size(max = 64)
-    @Column(name = "firstName")
+    @Column(name = "firstName", length = 64, nullable = false)
     protected String firstName;
 
-    @Size(max = 64)
-    @Column(name = "middleName")
+    @Column(name = "middleName", length = 64)
     protected String middleName;
 
-    @NotBlank
-    @Size(max = 64)
-    @Column(name = "lastName")
+    @Column(name = "lastName", length = 64, nullable = false)
     protected String lastName;
 
     public Person(String firstName, String middleName, String lastName) {

@@ -1,7 +1,7 @@
 package com.github.prominence.carrepair.controller.api;
 
-import com.github.prominence.carrepair.model.Client;
-import com.github.prominence.carrepair.model.Mechanic;
+import com.github.prominence.carrepair.model.dto.ClientDto;
+import com.github.prominence.carrepair.model.dto.MechanicDto;
 import com.github.prominence.carrepair.service.ClientService;
 import com.github.prominence.carrepair.service.MechanicService;
 import org.springframework.http.MediaType;
@@ -25,12 +25,12 @@ public class AutocompleteApiController {
     }
 
     @GetMapping(value = "/client", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Client> clientAutocomplete(@RequestParam String query) {
-        return clientService.searchByInitials(query);
+    public List<ClientDto> clientAutocomplete(@RequestParam String query) {
+        return clientService.convertToDtoList(clientService.searchByInitials(query));
     }
 
     @GetMapping(value = "/mechanic", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Mechanic> mechanicAutocomplete(@RequestParam String query) {
-        return mechanicService.searchByInitials(query);
+    public List<MechanicDto> mechanicAutocomplete(@RequestParam String query) {
+        return mechanicService.convertToDtoList(mechanicService.searchByInitials(query));
     }
 }

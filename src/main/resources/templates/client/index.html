@@ -45,7 +45,7 @@
             <td th:text="${client.firstName}"></td>
             <td th:text="${client.middleName}"></td>
             <td th:text="${client.lastName}"></td>
-            <td th:text="${client.phoneNo}"></td>
+            <td th:text="${client.phone}"></td>
             <td>
                 <div class="btn-group float-right">
                     <a th:href="@{/client/edit/{id}(id=${client.id})}" class="btn btn-secondary" th:text="#{common.edit.button}"></a>

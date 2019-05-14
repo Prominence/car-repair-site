@@ -1,6 +1,7 @@
 package com.github.prominence.carrepair.controller;
 
-import com.github.prominence.carrepair.model.Client;
+import com.github.prominence.carrepair.model.domain.Client;
+import com.github.prominence.carrepair.model.dto.ClientDto;
 import com.github.prominence.carrepair.service.ClientService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +32,7 @@ public class ClientController {
 
     @GetMapping
     public String index(@PageableDefault Pageable pageable, ModelMap modelMap) {
-        Page<Client> clientList = clientService.findAll(pageable);
+        Page<ClientDto> clientList = clientService.convertToDtoPage(clientService.findAll(pageable));
         logger.trace("Request to open list page for Clients. Returning {} page.", () -> pageable.getPageNumber() + 1);
 
         modelMap.addAttribute("clientList", clientList.getContent());
@@ -43,7 +44,7 @@ public class ClientController {
     @GetMapping(value = "/create")
     public String create(Model model) {
         logger.trace("Request to open create page for Client.");
-        model.addAttribute("client", new Client());
+        model.addAttribute("clientDto", new ClientDto());
 
         return "client/edit";
     }
@@ -53,7 +54,7 @@ public class ClientController {
         logger.trace("Request to open edit page for Client[{}].", () -> id);
         Optional<Client> clientOptional = clientService.findById(id);
         if (clientOptional.isPresent()) {
-            model.addAttribute("client", clientOptional.get());
+            model.addAttribute("clientDto", clientService.convertToDto(clientOptional.get()));
             return "client/edit";
         } else {
             return "redirect:/client";
@@ -61,10 +62,10 @@ public class ClientController {
     }
 
     @PostMapping(value = "/update/{id}")
-    public String update(@Valid Client client, BindingResult bindingResult, @PathVariable long id) {
+    public String update(@Valid ClientDto client, BindingResult bindingResult, @PathVariable long id) {
         logger.trace("Request to save {}.", () -> client);
         if (bindingResult.hasErrors()) {
-            logger.trace("{} has validation {} errors and won't be saved.", () -> client, bindingResult::getErrorCount);
+            logger.trace("{} has {} validation errors and won't be saved.", () -> client, bindingResult::getErrorCount);
             client.setId(id); // why should we do this?
             return "client/edit";
         }
@@ -74,10 +75,10 @@ public class ClientController {
     }
 
     @PostMapping(value = "/create")
-    public String save(@Valid Client client, BindingResult bindingResult) {
+    public String save(@Valid ClientDto client, BindingResult bindingResult) {
         logger.trace("Request to create {}.", () -> client);
         if (bindingResult.hasErrors()) {
-            logger.trace("{} has validation {} errors and won't be created.", () -> client, bindingResult::getErrorCount);
+            logger.trace("{} has {} validation errors and won't be created.", () -> client, bindingResult::getErrorCount);
             return "client/edit";
         }
 

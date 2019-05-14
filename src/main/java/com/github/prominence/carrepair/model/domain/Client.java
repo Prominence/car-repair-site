@@ -1,17 +1,15 @@
-package com.github.prominence.carrepair.model;
+package com.github.prominence.carrepair.model.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
 @Table(name = "client")
 public class Client extends Person {
 
-    @Size(max = 32)
-    @Column(name = "phoneNo")
+    @Column(name = "phoneNo", length = 32)
     private String phoneNo;
 
     public Client(String firstName, String middleName, String lastName, String phoneNo) {

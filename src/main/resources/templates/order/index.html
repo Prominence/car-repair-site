@@ -74,11 +74,11 @@
         </thead>
         <tbody>
         <tr th:each="order : ${orderList}" th:id="'order-row-' + ${order.id}">
-            <td th:text="${order.client.firstName + ' ' + order.client.lastName + '(' + order.client.id + ')'}"></td>
-            <td th:text="${order.mechanic.firstName + ' ' + order.mechanic.lastName + '(' + order.mechanic.id + ')'}"></td>
+            <td th:text="${order.clientFirstName + ' ' + order.clientLastName + '(' + order.clientId + ')'}"></td>
+            <td th:text="${order.mechanicFirstName + ' ' + order.mechanicLastName + '(' + order.mechanicId + ')'}"></td>
             <td class="word-breakable" th:text="${T(org.apache.commons.lang3.StringUtils).abbreviate(order.description, 128)}"></td>
-            <td th:text="${{order.createdOn}}"></td>
-            <td th:text="${{order.finishedOn}}"></td>
+            <td th:text="${{order.createdOnDate}}"></td>
+            <td th:text="${{order.finishedOnDate}}"></td>
             <td th:text="${{order.orderStatus}}"></td>
             <td th:text="${{order.totalPrice}}"></td>
             <td style="break-inside: avoid">

@@ -1,8 +1,8 @@
 package com.github.prominence.carrepair.repository.spec;
 
 import com.github.prominence.carrepair.enums.OrderStatus;
-import com.github.prominence.carrepair.model.Client;
-import com.github.prominence.carrepair.model.Order;
+import com.github.prominence.carrepair.model.domain.Client;
+import com.github.prominence.carrepair.model.domain.Order;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

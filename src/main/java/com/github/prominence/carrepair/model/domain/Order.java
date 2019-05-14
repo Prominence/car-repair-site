@@ -1,11 +1,8 @@
-package com.github.prominence.carrepair.model;
+package com.github.prominence.carrepair.model.domain;
 
 import com.github.prominence.carrepair.enums.OrderStatus;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -18,33 +15,27 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Size(max = 1024)
+    @Column(nullable = false)
     private String description;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false) // change to LAZY after DTO implementation
+    @ManyToOne(optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false) // change to LAZY after DTO implementation
+    @ManyToOne(optional = false)
     @JoinColumn(name = "mechanic_id", nullable = false)
     private Mechanic mechanic;
 
-    @NotNull
-    @Column(name = "createdOn")
+    @Column(name = "createdOn", nullable = false)
     private LocalDateTime createdOn;
 
     @Column(name = "finishedOn")
     private LocalDateTime finishedOn;
 
-    @Min(value = 0)
-    @Column(name = "totalPrice")
+    @Column(name = "totalPrice", nullable = false)
     private BigDecimal totalPrice;
 
-    @NotNull
-    @Column(name = "orderStatus")
+    @Column(name = "orderStatus", nullable = false)
     private String orderStatus = OrderStatus.SCHEDULED.toString();
 
     public Order(String description, Client client, Mechanic mechanic, LocalDateTime createdOn, LocalDateTime finishedOn, BigDecimal totalPrice, String orderStatus) {

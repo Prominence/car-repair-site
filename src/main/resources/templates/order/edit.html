@@ -10,56 +10,56 @@
     <h1 th:text="#{order.title}"></h1>
 </div>
 <div layout:fragment="content">
-    <form th:action="'/order/' + ${order.id != null ? 'update/' + order.id : 'create'}" th:object="${order}" method="post">
+    <form th:action="'/order/' + ${orderDto.id != null ? 'update/' + orderDto.id : 'create'}" th:object="${orderDto}" method="post">
         <div class="form-group row">
             <label for="orderDescription" class="col-sm-2 col-form-label" th:text="#{description.label}"></label>
             <div class="col-sm-10">
-                <textarea name="description" class="form-control" id="orderDescription" th:field="*{description}" th:errorclass="is-invalid" th:value="${order.description}"></textarea>
+                <textarea name="description" class="form-control" id="orderDescription" th:field="*{description}" th:errorclass="is-invalid" th:value="${orderDto.description}"></textarea>
                 <div th:replace="common::errors('description')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderClient_tmp" class="col-sm-2 col-form-label" th:text="#{client.label}"></label>
-            <div class="input-group col-sm-10" th:with="client=${order.client}, clientInitials=${(client != null && client.id != null) ? (client.firstName+ ' ' + client.lastName) : null}">
+            <div class="input-group col-sm-10" th:with="clientInitials=${(orderDto.clientId != null) ? (orderDto.clientFirstName + ' ' + orderDto.clientLastName) : null}">
                 <span class="input-group-prepend input-group-text" id="orderClientPlaceholder" th:text="${clientInitials}"></span>
-                <input type="text" name="clientId_tmp" class="form-control" id="orderClient_tmp" th:classappend="${#fields.hasErrors('client') ? 'is-invalid' : null}">
-                <input type="hidden" name="clientId" id="orderClient" th:value="${client != null && client.id != null ? client.id : ''}">
-                <div th:replace="common::errors('client')"></div>
+                <input type="text" name="clientId_tmp" class="form-control" id="orderClient_tmp" th:classappend="${#fields.hasErrors('clientId') ? 'is-invalid' : null}">
+                <input type="hidden" name="clientId" id="orderClient" th:value="${orderDto.clientId}">
+                <div th:replace="common::errors('clientId')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderMechanic" class="col-sm-2 col-form-label" th:text="#{mechanic.label}"></label>
-            <div class="input-group col-sm-10" th:with="mechanic=${order.mechanic}, mechanicInitials=${(mechanic != null && mechanic.id != null) ? (mechanic.firstName+ ' ' + mechanic.lastName) : null}">
+            <div class="input-group col-sm-10" th:with="mechanicInitials=${(orderDto.mechanicId != null) ? (orderDto.mechanicFirstName + ' ' + orderDto.mechanicLastName) : null}">
                 <span class="input-group-prepend input-group-text" id="orderMechanicPlaceholder" th:text="${mechanicInitials}"></span>
-                <input type="text" name="mechanicId_tmp" class="form-control" id="orderMechanic_tmp" th:classappend="${#fields.hasErrors('mechanic') ? 'is-invalid' : null}">
-                <input type="hidden" name="mechanicId" id="orderMechanic" th:value="${mechanic != null && mechanic.id != null ? mechanic.id : ''}">
-                <div th:replace="common::errors('mechanic')"></div>
+                <input type="text" name="mechanicId_tmp" class="form-control" id="orderMechanic_tmp" th:classappend="${#fields.hasErrors('mechanicId') ? 'is-invalid' : null}">
+                <input type="hidden" name="mechanicId" id="orderMechanic" th:value="${orderDto.mechanicId}">
+                <div th:replace="common::errors('mechanicId')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderCreatedOn" class="col-sm-2 col-form-label" th:text="#{createdOn.label}"></label>
             <div class="input-group col-sm-10">
-                <input type="datetime-local" name="createdOn" class="form-control" id="orderCreatedOn" th:field="*{createdOn}" th:errorclass="is-invalid" th:value="${order.createdOn}">
+                <input type="datetime-local" name="createdOnDate" class="form-control" id="orderCreatedOn" th:field="*{createdOnDate}" th:errorclass="is-invalid" th:value="${orderDto.createdOnDate}">
                 <span class="input-group-append input-group-text">
                     <i class="far fa-calendar"></i>
                 </span>
-                <div th:replace="common::errors('createdOn')"></div>
+                <div th:replace="common::errors('createdOnDate')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderFinishedOn" class="col-sm-2 col-form-label" th:text="#{finishedOn.label}"></label>
             <div class="input-group col-sm-10">
-                <input type="datetime-local" name="finishedOn" class="form-control" id="orderFinishedOn" th:field="*{finishedOn}" th:errorclass="is-invalid" th:value="${order.finishedOn}">
+                <input type="datetime-local" name="finishedOnDate" class="form-control" id="orderFinishedOn" th:field="*{finishedOnDate}" th:errorclass="is-invalid" th:value="${orderDto.finishedOnDate}">
                 <span class="input-group-append input-group-text">
                     <i class="far fa-calendar"></i>
                 </span>
-                <div th:replace="common::errors('finishedOn')"></div>
+                <div th:replace="common::errors('finishedOnDate')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="orderTotalPrice" class="col-sm-2 col-form-label" th:text="#{totalPrice.label}"></label>
             <div class="input-group col-sm-10">
-                <input type="number" name="totalPrice" class="form-control" id="orderTotalPrice" th:field="*{totalPrice}" th:errorclass="is-invalid" th:value="${order.totalPrice}">
+                <input type="number" name="totalPrice" class="form-control" id="orderTotalPrice" th:field="*{totalPrice}" th:errorclass="is-invalid" th:value="${orderDto.totalPrice}">
                 <span class="input-group-append input-group-text">EUR</span>
                 <div th:replace="common::errors('totalPrice')"></div>
             </div>
@@ -67,7 +67,7 @@
         <div class="form-group row">
             <label for="orderStatus" class="col-sm-2 col-form-label" th:text="#{status.label}"></label>
             <div class="col-sm-10">
-                <select name="orderStatus" class="form-control custom-select" id="orderStatus" th:field="*{orderStatus}" th:errorclass="is-invalid" th:value="${order.orderStatus}">
+                <select name="orderStatus" class="form-control custom-select" id="orderStatus" th:field="*{orderStatus}" th:errorclass="is-invalid" th:value="${orderDto.orderStatus}">
                     <option th:each="orderStatus : ${orderStatuses}" th:value="${orderStatus.toString()}" th:text="${{orderStatus}}"></option>
                 </select>
                 <div th:replace="common::errors('orderStatus')"></div>

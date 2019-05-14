@@ -9,32 +9,32 @@
     <h1 th:text="#{mechanic.title}"></h1>
 </div>
 <div layout:fragment="content">
-    <form th:action="'/mechanic/' + ${mechanic.id != null ? 'update/' + mechanic.id : 'create'}" th:object="${mechanic}" method="post">
+    <form th:action="'/mechanic/' + ${mechanicDto.id != null ? 'update/' + mechanicDto.id : 'create'}" th:object="${mechanicDto}" method="post">
         <div class="form-group row">
             <label for="mechanicFirstName" class="col-sm-2 col-form-label" th:text="#{firstName.label}"></label>
             <div class="col-sm-10">
-                <input type="text" name="firstName" class="form-control" id="mechanicFirstName" th:field="*{firstName}" th:errorclass="is-invalid" th:value="${mechanic.firstName}">
+                <input type="text" name="firstName" class="form-control" id="mechanicFirstName" th:field="*{firstName}" th:errorclass="is-invalid" th:value="${mechanicDto.firstName}">
                 <div th:replace="common::errors('firstName')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="mechanicMiddleName" class="col-sm-2 col-form-label" th:text="#{middleName.label}"></label>
             <div class="col-sm-10">
-                <input type="text" name="middleName" class="form-control" id="mechanicMiddleName" th:field="*{middleName}" th:errorclass="is-invalid" th:value="${mechanic.middleName}">
+                <input type="text" name="middleName" class="form-control" id="mechanicMiddleName" th:field="*{middleName}" th:errorclass="is-invalid" th:value="${mechanicDto.middleName}">
                 <div th:replace="common::errors('middleName')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="mechanicLastName" class="col-sm-2 col-form-label" th:text="#{lastName.label}"></label>
             <div class="col-sm-10">
-                <input type="text" name="lastName" class="form-control" id="mechanicLastName" th:field="*{lastName}" th:errorclass="is-invalid" th:value="${mechanic.lastName}">
+                <input type="text" name="lastName" class="form-control" id="mechanicLastName" th:field="*{lastName}" th:errorclass="is-invalid" th:value="${mechanicDto.lastName}">
                 <div th:replace="common::errors('lastName')"></div>
             </div>
         </div>
         <div class="form-group row">
             <label for="mechanicHourlyPayment" class="col-sm-2 col-form-label" th:text="#{hourlyPayment.label}"></label>
             <div class="col-sm-10">
-                <input type="number" name="hourlyPayment" class="form-control" id="mechanicHourlyPayment" th:field="*{hourlyPayment}" th:errorclass="is-invalid" th:value="${mechanic.hourlyPayment}">
+                <input type="number" name="hourlyPayment" class="form-control" id="mechanicHourlyPayment" th:field="*{hourlyPayment}" th:errorclass="is-invalid" th:value="${mechanicDto.hourlyPayment}">
                 <div th:replace="common::errors('hourlyPayment')"></div>
             </div>
         </div>

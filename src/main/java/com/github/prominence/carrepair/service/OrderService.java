@@ -1,11 +1,14 @@
 package com.github.prominence.carrepair.service;
 
-import com.github.prominence.carrepair.model.Order;
+import com.github.prominence.carrepair.model.domain.Order;
+import com.github.prominence.carrepair.model.dto.OrderDto;
+import com.github.prominence.carrepair.model.mapper.OrderMapper;
 import com.github.prominence.carrepair.repository.OrderRepository;
 import com.github.prominence.carrepair.validation.OrderValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -19,18 +22,20 @@ public class OrderService {
     private static final Logger logger = LogManager.getLogger(OrderService.class);
 
     private OrderRepository orderRepository;
-
     private ClientService clientService;
     private MechanicService mechanicService;
     private SmartValidator smartValidator;
     private OrderValidator orderValidator;
+    private OrderMapper orderMapper;
 
-    public OrderService(OrderRepository orderRepository, ClientService clientService, MechanicService mechanicService, SmartValidator smartValidator, OrderValidator orderValidator) {
+    public OrderService(OrderRepository orderRepository, ClientService clientService, MechanicService mechanicService, SmartValidator smartValidator,
+                        OrderValidator orderValidator, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.clientService = clientService;
         this.mechanicService = mechanicService;
         this.smartValidator = smartValidator;
         this.orderValidator = orderValidator;
+        this.orderMapper = orderMapper;
     }
 
     public Page<Order> findAll(Specification<Order> specification, Pageable pageable) {
@@ -51,6 +56,10 @@ public class OrderService {
         return orderToSave;
     }
 
+    public Order save(OrderDto orderDto) {
+        return save(orderMapper.orderDtoToOrder(orderDto));
+    }
+
     public boolean deleteOrderById(Long id) {
         try {
             orderRepository.deleteById(id);
@@ -68,16 +77,37 @@ public class OrderService {
         return orderCount;
     }
 
-    public void fetchNestedObjectsAndValidate(Order order, Long clientId, Long mechanicId, BindingResult bindingResult) {
+    public void fetchNestedObjectsAndValidate(OrderDto order, Long clientId, Long mechanicId, BindingResult bindingResult) {
         if (clientId != null) {
             logger.trace("Fetching Client[{}] for {}.", () -> clientId, () -> order);
-            clientService.findById(clientId).ifPresent(order::setClient);
+            clientService.findById(clientId).ifPresent(client -> {
+                order.setClientId(client.getId());
+                order.setClientFirstName(client.getFirstName());
+                order.setClientMiddleName(client.getMiddleName());
+                order.setClientLastName(client.getLastName());
+            });
         }
         if (mechanicId != null) {
             logger.trace("Fetching Mechanic[{}] for {}.", () -> clientId, () -> order);
-            mechanicService.findById(mechanicId).ifPresent(order::setMechanic);
+            mechanicService.findById(mechanicId).ifPresent(mechanic -> {
+                order.setMechanicId(mechanic.getId());
+                order.setMechanicFirstName(mechanic.getFirstName());
+                order.setClientMiddleName(mechanic.getMiddleName());
+                order.setMechanicLastName(mechanic.getLastName());
+            });
         }
         smartValidator.validate(order, bindingResult);
         orderValidator.validate(order, bindingResult);
+    }
+
+    public Page<OrderDto> convertToDtoPage(Page<Order> orderPage) {
+        final Page<OrderDto> orderDtoPage = new PageImpl<>(orderMapper.ordersToOrderDtoList(orderPage.getContent()),
+                orderPage.getPageable(), orderPage.getTotalElements());
+        logger.trace("Dto page: {}.", () -> orderDtoPage);
+        return orderDtoPage;
+    }
+
+    public OrderDto convertToDto(Order order) {
+        return orderMapper.orderToOrderDto(order);
     }
 }

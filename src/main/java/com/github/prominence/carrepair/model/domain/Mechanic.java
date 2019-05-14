@@ -1,10 +1,8 @@
-package com.github.prominence.carrepair.model;
+package com.github.prominence.carrepair.model.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -12,9 +10,7 @@ import java.util.Objects;
 @Table(name = "mechanic")
 public class Mechanic extends Person {
 
-    @NotNull
-    @Min(value = 0)
-    @Column(name = "hourlyPayment")
+    @Column(name = "hourlyPayment", nullable = false)
     private BigDecimal hourlyPayment;
 
     public Mechanic(String firstName, String middleName, String lastName, BigDecimal hourlyPayment) {

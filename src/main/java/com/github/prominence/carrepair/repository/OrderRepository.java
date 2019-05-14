@@ -1,6 +1,6 @@
 package com.github.prominence.carrepair.repository;
 
-import com.github.prominence.carrepair.model.Order;
+import com.github.prominence.carrepair.model.domain.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

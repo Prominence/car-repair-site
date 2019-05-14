@@ -1,13 +1,16 @@
 package com.github.prominence.carrepair.service;
 
 import com.github.prominence.carrepair.enums.OrderStatus;
-import com.github.prominence.carrepair.model.Mechanic;
-import com.github.prominence.carrepair.model.Order;
+import com.github.prominence.carrepair.model.domain.Mechanic;
+import com.github.prominence.carrepair.model.domain.Order;
+import com.github.prominence.carrepair.model.dto.MechanicDto;
+import com.github.prominence.carrepair.model.mapper.MechanicMapper;
 import com.github.prominence.carrepair.repository.MechanicRepository;
 import com.github.prominence.carrepair.repository.OrderRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +25,12 @@ public class MechanicService {
 
     private MechanicRepository mechanicRepository;
     private OrderRepository orderRepository;
+    private MechanicMapper mechanicMapper;
 
-    public MechanicService(MechanicRepository mechanicRepository, OrderRepository orderRepository) {
+    public MechanicService(MechanicRepository mechanicRepository, OrderRepository orderRepository, MechanicMapper mechanicMapper) {
         this.mechanicRepository = mechanicRepository;
         this.orderRepository = orderRepository;
+        this.mechanicMapper = mechanicMapper;
     }
 
     public Page<Mechanic> findAll(Pageable pageable) {
@@ -44,6 +49,10 @@ public class MechanicService {
         final Mechanic mechanicToSave = mechanicRepository.save(client);
         logger.trace("[{}] was saved.", () -> mechanicToSave);
         return mechanicToSave;
+    }
+
+    public Mechanic save(MechanicDto mechanicDto) {
+        return save(mechanicMapper.mechanicDtoToMechanic(mechanicDto));
     }
 
     public boolean deleteMechanicById(Long id) {
@@ -81,5 +90,20 @@ public class MechanicService {
         final List<Mechanic> allByInitials = mechanicRepository.findAllByInitials(query);
         logger.debug("Found {} mechanics by initials: {}.", allByInitials::size, () -> query);
         return allByInitials;
+    }
+
+    public Page<MechanicDto> convertToDtoPage(Page<Mechanic> mechanicPage) {
+        final Page<MechanicDto> mechanicDtoPage = new PageImpl<>(mechanicMapper.mechanicsToMechanicDtoList(mechanicPage.getContent()),
+                mechanicPage.getPageable(), mechanicPage.getTotalElements());
+        logger.trace("Dto page: {}.", () -> mechanicDtoPage);
+        return mechanicDtoPage;
+    }
+
+    public MechanicDto convertToDto(Mechanic mechanic) {
+        return mechanicMapper.mechanicToMechanicDto(mechanic);
+    }
+
+    public List<MechanicDto> convertToDtoList(List<Mechanic> mechanicList) {
+        return mechanicMapper.mechanicsToMechanicDtoList(mechanicList);
     }
 }

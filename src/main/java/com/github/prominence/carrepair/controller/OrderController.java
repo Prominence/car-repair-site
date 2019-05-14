@@ -1,7 +1,8 @@
 package com.github.prominence.carrepair.controller;
 
 import com.github.prominence.carrepair.enums.OrderStatus;
-import com.github.prominence.carrepair.model.Order;
+import com.github.prominence.carrepair.model.domain.Order;
+import com.github.prominence.carrepair.model.dto.OrderDto;
 import com.github.prominence.carrepair.repository.spec.OrderSpecifications;
 import com.github.prominence.carrepair.service.OrderService;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +33,9 @@ public class OrderController {
     @GetMapping
     public String index(@PageableDefault Pageable pageable, @RequestParam(required = false) String client, @RequestParam(required = false) String description,
                         @RequestParam(required = false) OrderStatus orderStatus, ModelMap modelMap) {
-        Page<Order> orderList = orderService.findAll(OrderSpecifications.search(client, description, orderStatus), pageable);
+        Page<OrderDto> orderList = orderService.convertToDtoPage(
+                orderService.findAll(OrderSpecifications.search(client, description, orderStatus), pageable)
+        );
         logger.trace("Request to open list page for Orders. Returning {} page.", () -> pageable.getPageNumber() + 1);
 
         modelMap.addAttribute("orderList", orderList.getContent());
@@ -45,7 +48,7 @@ public class OrderController {
     @GetMapping(value = "/create")
     public String create(Model model) {
         logger.trace("Request to open create page for Order.");
-        model.addAttribute("order", new Order());
+        model.addAttribute("orderDto", new OrderDto());
         model.addAttribute("orderStatuses", OrderStatus.values());
 
         return "order/edit";
@@ -56,7 +59,7 @@ public class OrderController {
         logger.trace("Request to open edit page for Order[{}].", () -> id);
         Optional<Order> orderOptional = orderService.findById(id);
         if (orderOptional.isPresent()) {
-            model.addAttribute("order", orderOptional.get());
+            model.addAttribute("orderDto", orderService.convertToDto(orderOptional.get()));
             model.addAttribute("orderStatuses", OrderStatus.values());
             return "order/edit";
         } else {
@@ -65,11 +68,11 @@ public class OrderController {
     }
 
     @PostMapping(value = "/update/{id}")
-    public String update(Order order, BindingResult bindingResult, @PathVariable long id, Long clientId, Long mechanicId, Model model) {
+    public String update(OrderDto order, BindingResult bindingResult, @PathVariable long id, Long clientId, Long mechanicId, Model model) {
         logger.trace("Request to save {}.", () -> order);
         orderService.fetchNestedObjectsAndValidate(order, clientId, mechanicId, bindingResult);
         if (bindingResult.hasErrors()) {
-            logger.trace("{} has validation {} errors and won't be saved.", () -> order, bindingResult::getErrorCount);
+            logger.trace("{} has {} validation errors and won't be saved.", () -> order, bindingResult::getErrorCount);
             order.setId(id); // why should we do this?
             model.addAttribute("orderStatuses", OrderStatus.values());
             return "order/edit";
@@ -80,11 +83,11 @@ public class OrderController {
     }
 
     @PostMapping(value = "/create")
-    public String save(Order order, BindingResult bindingResult, Long clientId, Long mechanicId, Model model) {
+    public String save(OrderDto order, BindingResult bindingResult, Long clientId, Long mechanicId, Model model) {
         logger.trace("Request to create {}.", () -> order);
         orderService.fetchNestedObjectsAndValidate(order, clientId, mechanicId, bindingResult);
         if (bindingResult.hasErrors()) {
-            logger.trace("{} has validation {} errors and won't be created.", () -> order, bindingResult::getErrorCount);
+            logger.trace("{} has {} validation errors and won't be created.", () -> order, bindingResult::getErrorCount);
             model.addAttribute("orderStatuses", OrderStatus.values());
             return "order/edit";
         }

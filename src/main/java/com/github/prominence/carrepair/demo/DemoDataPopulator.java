@@ -2,9 +2,9 @@ package com.github.prominence.carrepair.demo;
 
 import com.github.javafaker.Faker;
 import com.github.prominence.carrepair.enums.OrderStatus;
-import com.github.prominence.carrepair.model.Client;
-import com.github.prominence.carrepair.model.Mechanic;
-import com.github.prominence.carrepair.model.Order;
+import com.github.prominence.carrepair.model.domain.Client;
+import com.github.prominence.carrepair.model.domain.Mechanic;
+import com.github.prominence.carrepair.model.domain.Order;
 import com.github.prominence.carrepair.service.ClientService;
 import com.github.prominence.carrepair.service.MechanicService;
 import com.github.prominence.carrepair.service.OrderService;
