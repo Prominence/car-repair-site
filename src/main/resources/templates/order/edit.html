@@ -68,7 +68,7 @@
             <label for="orderStatus" class="col-sm-2 col-form-label" th:text="#{status.label}"></label>
             <div class="col-sm-10">
                 <select name="orderStatus" class="form-control custom-select" id="orderStatus" th:field="*{orderStatus}" th:errorclass="is-invalid" th:value="${orderDto.orderStatus}">
-                    <option th:each="orderStatus : ${orderStatuses}" th:value="${orderStatus.toString()}" th:text="${{orderStatus}}"></option>
+                    <option th:each="orderStatus : ${orderStatuses}" th:value="${{orderStatus}}" th:text="${{orderStatus}}"></option>
                 </select>
                 <div th:replace="common::errors('orderStatus')"></div>
             </div>

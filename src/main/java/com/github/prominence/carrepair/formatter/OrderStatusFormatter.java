@@ -15,7 +15,7 @@ public class OrderStatusFormatter implements Formatter<OrderStatus> {
     private static final Logger logger = LogManager.getLogger(OrderStatusFormatter.class);
 
     @Override
-    public OrderStatus parse(String text, Locale locale) throws ParseException {
+    public OrderStatus parse(String text, Locale locale) {
         final OrderStatus parsedOrderStatus = OrderStatus.valueOf(text.toUpperCase());
         logger.trace("Parsing String[{}] to OrderStatus instance: {}.", () -> text, () -> parsedOrderStatus);
         return parsedOrderStatus;
