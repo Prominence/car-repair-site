@@ -81,7 +81,7 @@
             <td th:text="${{order.finishedOnDate}}"></td>
             <td th:text="${{order.orderStatus}}"></td>
             <td th:text="${{order.totalPrice}}"></td>
-            <td style="break-inside: avoid">
+            <td>
                 <div class="btn-group float-right">
                     <a th:href="@{/order/edit/{id}(id=${order.id})}" class="btn btn-secondary" th:text="#{common.edit.button}"></a>
                     <button type="button" class="btn btn-danger" th:onclick="'deleteOrderById(' + ${order.id} + ')'" th:text="#{common.delete.button}"></button>
