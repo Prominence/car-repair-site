@@ -36,7 +36,7 @@ public class Order {
     private BigDecimal totalPrice;
 
     @Column(name = "orderStatus", nullable = false)
-    private String orderStatus = OrderStatus.SCHEDULED.toString();
+    private String orderStatus = OrderStatus.SCHEDULED.toString(); // TODO: change to OrderStatus class
 
     public Order(String description, Client client, Mechanic mechanic, LocalDateTime createdOn, LocalDateTime finishedOn, BigDecimal totalPrice, String orderStatus) {
         this.description = description;

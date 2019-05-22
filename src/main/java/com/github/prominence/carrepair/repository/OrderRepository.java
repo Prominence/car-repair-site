@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
-    public List<Order> findAllByMechanic_Id(Long id);
+    List<Order> findAllByMechanic_Id(Long id);
 }
