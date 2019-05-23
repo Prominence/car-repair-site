@@ -1,7 +1,6 @@
 package com.github.prominence.carrepair.repository;
 
 import com.github.prominence.carrepair.model.domain.Client;
-import com.github.prominence.carrepair.repository.ClientRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
