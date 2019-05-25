@@ -48,9 +48,6 @@ public class OrderServiceIntegrationTest {
     private MechanicService mechanicService;
 
     @MockBean
-    private SmartValidator smartValidator;
-
-    @MockBean
     private OrderValidator orderValidator;
 
     @MockBean
@@ -246,7 +243,6 @@ public class OrderServiceIntegrationTest {
         orderService.fetchNestedObjectsAndValidate(orderDto, orderDto.getClientId(), orderDto.getMechanicId(), bindingResult);
 
         // then
-        verify(smartValidator, times(1)).validate(orderDto, bindingResult);
         verify(orderValidator, times(1)).validate(orderDto, bindingResult);
     }
 

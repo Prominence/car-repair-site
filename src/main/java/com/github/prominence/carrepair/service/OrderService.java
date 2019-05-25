@@ -24,16 +24,14 @@ public class OrderService {
     private OrderRepository orderRepository;
     private ClientService clientService;
     private MechanicService mechanicService;
-    private SmartValidator smartValidator;
     private OrderValidator orderValidator;
     private OrderMapper orderMapper;
 
-    public OrderService(OrderRepository orderRepository, ClientService clientService, MechanicService mechanicService, SmartValidator smartValidator,
+    public OrderService(OrderRepository orderRepository, ClientService clientService, MechanicService mechanicService,
                         OrderValidator orderValidator, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.clientService = clientService;
         this.mechanicService = mechanicService;
-        this.smartValidator = smartValidator;
         this.orderValidator = orderValidator;
         this.orderMapper = orderMapper;
     }
@@ -101,7 +99,6 @@ public class OrderService {
                 order.setMechanicLastName(mechanic.getLastName());
             });
         }
-        smartValidator.validate(order, bindingResult);
         orderValidator.validate(order, bindingResult);
     }
 

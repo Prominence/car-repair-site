@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import org.springframework.validation.SmartValidator;
 import org.springframework.validation.Validator;
 
 import java.time.LocalDateTime;
@@ -21,10 +22,12 @@ public class OrderValidator implements Validator {
 
     private CustomDateTimeFormatter customDateTimeFormatter;
     private OrderStatusFormatter orderStatusFormatter;
+    private SmartValidator smartValidator;
 
-    public OrderValidator(CustomDateTimeFormatter customDateTimeFormatter, OrderStatusFormatter orderStatusFormatter) {
+    public OrderValidator(CustomDateTimeFormatter customDateTimeFormatter, OrderStatusFormatter orderStatusFormatter, SmartValidator smartValidator) {
         this.customDateTimeFormatter = customDateTimeFormatter;
         this.orderStatusFormatter = orderStatusFormatter;
+        this.smartValidator = smartValidator;
     }
 
     @Override
@@ -35,6 +38,8 @@ public class OrderValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         OrderDto order = (OrderDto) o;
+
+        smartValidator.validate(order, errors);
 
         Locale locale = LocaleContextHolder.getLocale();
         OrderStatus orderStatus = orderStatusFormatter.parse(order.getOrderStatus(), locale);

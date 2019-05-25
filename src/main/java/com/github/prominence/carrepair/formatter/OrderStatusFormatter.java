@@ -16,6 +16,7 @@ public class OrderStatusFormatter implements Formatter<OrderStatus> {
 
     @Override
     public OrderStatus parse(String text, Locale locale) {
+        if (text == null) return null;
         final OrderStatus parsedOrderStatus = OrderStatus.valueOf(text.toUpperCase());
         logger.trace("Parsing String[{}] to OrderStatus instance: {}.", () -> text, () -> parsedOrderStatus);
         return parsedOrderStatus;
@@ -23,6 +24,7 @@ public class OrderStatusFormatter implements Formatter<OrderStatus> {
 
     @Override
     public String print(OrderStatus object, Locale locale) {
+        if (object == null) return null;
         final String formattedOrderStatus = StringUtils.capitalize(object.toString().toLowerCase());
         logger.trace("Formatting OrderStatus[{}] to String instance: {}.", () -> object, () -> formattedOrderStatus);
         return formattedOrderStatus;
