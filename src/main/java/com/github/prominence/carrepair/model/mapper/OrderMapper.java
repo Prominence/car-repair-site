@@ -47,6 +47,7 @@ public abstract class OrderMapper {
 
     @BeforeMapping
     protected void checkForEmptyStrings(OrderDto orderDto) {
+        if (orderDto == null) return;
         if (StringUtils.isEmpty(orderDto.getCreatedOnDate())) {
             orderDto.setCreatedOnDate(null);
         }
