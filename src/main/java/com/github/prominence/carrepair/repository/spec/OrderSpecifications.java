@@ -41,4 +41,8 @@ public class OrderSpecifications {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+    public static Specification<Order> empty() {
+        return (root, criteriaQuery, criteriaBuilder) -> null;
+    }
 }

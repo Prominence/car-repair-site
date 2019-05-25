@@ -59,6 +59,10 @@ public class ClientService {
         }
     }
 
+    public void deleteAll() {
+        clientRepository.deleteAll();
+    }
+
     public long getClientCount() {
         final long clientCount = clientRepository.count();
         logger.trace("Found {} clients.", () -> clientCount);

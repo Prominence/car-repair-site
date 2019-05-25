@@ -71,12 +71,17 @@ public class OrderService {
         }
     }
 
+    public void deleteAll() {
+        orderRepository.deleteAll();
+    }
+
     public long getOrderCount() {
         final long orderCount = orderRepository.count();
         logger.trace("Found {} orders.", () -> orderCount);
         return orderCount;
     }
 
+    // TODO: check possible useless parameters
     public void fetchNestedObjectsAndValidate(OrderDto order, Long clientId, Long mechanicId, BindingResult bindingResult) {
         if (clientId != null) {
             logger.trace("Fetching Client[{}] for {}.", () -> clientId, () -> order);

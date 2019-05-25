@@ -66,6 +66,10 @@ public class MechanicService {
         }
     }
 
+    public void deleteAll() {
+        mechanicRepository.deleteAll();
+    }
+
     public Map<OrderStatus, Integer> getOrderStatistics(Long mechanicId) {
         Map<OrderStatus, Integer> statistics = new HashMap<>();
         statistics.put(OrderStatus.SCHEDULED, 0);
