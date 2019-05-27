@@ -1,5 +1,6 @@
 package com.github.prominence.carrepair.controller;
 
+import com.github.prominence.carrepair.controller.exception.ResourceNotFoundException;
 import com.github.prominence.carrepair.model.domain.Client;
 import com.github.prominence.carrepair.model.dto.ClientDto;
 import com.github.prominence.carrepair.service.ClientService;
@@ -57,7 +58,7 @@ public class ClientController {
             model.addAttribute("clientDto", clientService.convertToDto(clientOptional.get()));
             return "client/edit";
         } else {
-            return "redirect:/client";
+            throw new ResourceNotFoundException();
         }
     }
 

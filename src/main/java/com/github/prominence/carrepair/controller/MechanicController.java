@@ -1,5 +1,6 @@
 package com.github.prominence.carrepair.controller;
 
+import com.github.prominence.carrepair.controller.exception.ResourceNotFoundException;
 import com.github.prominence.carrepair.enums.OrderStatus;
 import com.github.prominence.carrepair.model.domain.Mechanic;
 import com.github.prominence.carrepair.model.dto.MechanicDto;
@@ -58,7 +59,7 @@ public class MechanicController {
             model.addAttribute("mechanicDto", mechanicService.convertToDto(mechanicOptional.get()));
             return "mechanic/edit";
         } else {
-            return "redirect:/mechanic";
+            throw new ResourceNotFoundException();
         }
     }
 

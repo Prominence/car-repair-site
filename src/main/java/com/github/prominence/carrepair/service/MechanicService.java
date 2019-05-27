@@ -1,5 +1,6 @@
 package com.github.prominence.carrepair.service;
 
+import com.github.prominence.carrepair.controller.exception.ResourceNotFoundException;
 import com.github.prominence.carrepair.enums.OrderStatus;
 import com.github.prominence.carrepair.model.domain.Mechanic;
 import com.github.prominence.carrepair.model.domain.Order;
@@ -71,6 +72,7 @@ public class MechanicService {
     }
 
     public Map<OrderStatus, Integer> getOrderStatistics(Long mechanicId) {
+        if (!mechanicRepository.findById(mechanicId).isPresent()) throw new ResourceNotFoundException();
         Map<OrderStatus, Integer> statistics = new HashMap<>();
         statistics.put(OrderStatus.SCHEDULED, 0);
         statistics.put(OrderStatus.ACCEPTED, 0);

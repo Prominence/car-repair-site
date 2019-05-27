@@ -69,6 +69,8 @@ public class DemoDataPopulator {
         long mechanicsCount = mechanicService.getMechanicCount();
         long clientsCount = clientService.getClientCount();
 
+        if (mechanicsCount == 0 || clientsCount == 0) return args -> {};
+
         List<Order> demoOrderList = Stream.generate(() -> {
             Order order = new Order();
             order.setOrderStatus(orderStatuses[RandomUtils.nextInt(0, 3)]);

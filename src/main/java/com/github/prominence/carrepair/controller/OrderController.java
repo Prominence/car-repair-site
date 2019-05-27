@@ -1,5 +1,6 @@
 package com.github.prominence.carrepair.controller;
 
+import com.github.prominence.carrepair.controller.exception.ResourceNotFoundException;
 import com.github.prominence.carrepair.enums.OrderStatus;
 import com.github.prominence.carrepair.model.domain.Order;
 import com.github.prominence.carrepair.model.dto.OrderDto;
@@ -63,7 +64,7 @@ public class OrderController {
             model.addAttribute("orderStatuses", OrderStatus.values());
             return "order/edit";
         } else {
-            return "redirect:/order";
+            throw new ResourceNotFoundException();
         }
     }
 

@@ -2,11 +2,8 @@ package com.github.prominence.carrepair;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableJpaRepositories("com.github.prominence.carrepair.repository")
-@EntityScan("com.github.prominence.carrepair.model")
+// @EnableJpaRepositories and @EntityScan annotations are not required as all classes are placed in the main application package or its sub package(s).
 @SpringBootApplication
 public class CarRepairApplication {
 
@@ -15,5 +12,4 @@ public class CarRepairApplication {
     }
 
 }
-// TODO: tests
 // TODO: big data
