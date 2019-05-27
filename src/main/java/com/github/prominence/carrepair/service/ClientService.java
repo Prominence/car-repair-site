@@ -76,7 +76,7 @@ public class ClientService {
     }
 
     public Page<ClientDto> convertToDtoPage(Page<Client> clientPage) {
-        final Page<ClientDto> clientDtoPage = new PageImpl<> (clientMapper.clientsToClientDtoList(clientPage.getContent()),
+        final Page<ClientDto> clientDtoPage = new PageImpl<>(clientMapper.clientsToClientDtoList(clientPage.getContent()),
                 clientPage.getPageable(), clientPage.getTotalElements());
         logger.trace("Dto page: {}.", () -> clientDtoPage);
         return clientDtoPage;

@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 
 @Component
 public class DemoDataPopulator {
-    private static final int COUNT = 100;
+    private static final int DEMO_ENTRIES_COUNT = 100;
     private static final int DEFAULT_PAGE_SIZE = 10;
     private final Logger logger = LogManager.getLogger(DemoDataPopulator.class);
 
@@ -35,32 +35,36 @@ public class DemoDataPopulator {
 
     @Bean
     public CommandLineRunner clientDemoData(ClientService clientService) {
-        List<Client> demoClientList = Stream.generate(() -> {
+        Stream<Client> demoClientList = Stream.generate(() -> {
             Client client = new Client();
             client.setFirstName(faker.name().firstName());
             client.setLastName(faker.name().lastName());
             client.setMiddleName(faker.name().username());
             client.setPhoneNo(faker.phoneNumber().phoneNumber());
             return client;
-        }).limit(COUNT).collect(Collectors.toList());
-        logger.info("[Demo Data] Populated {} clients.", demoClientList::size);
+        }).parallel().limit(DEMO_ENTRIES_COUNT);
 
-        return args -> demoClientList.forEach(clientService::save);
+        return args ->  {
+            demoClientList.forEach(clientService::save);
+            logger.info("[Demo Data] Populated {} clients.", DEMO_ENTRIES_COUNT);
+        };
     }
 
     @Bean
     public CommandLineRunner mechanicDemoData(MechanicService mechanicService) {
-        List<Mechanic> demoMechanicList = Stream.generate(() -> {
+        Stream<Mechanic> demoMechanicList = Stream.generate(() -> {
             Mechanic mechanic = new Mechanic();
             mechanic.setFirstName(faker.name().firstName());
             mechanic.setLastName(faker.name().lastName());
             mechanic.setMiddleName(faker.name().username());
             mechanic.setHourlyPayment(BigDecimal.valueOf(faker.number().randomDouble(3, 100, 999)));
             return mechanic;
-        }).limit(COUNT).collect(Collectors.toList());
-        logger.info("[Demo Data] Populated {} mechanics.", demoMechanicList::size);
+        }).parallel().limit(DEMO_ENTRIES_COUNT);
 
-        return args -> demoMechanicList.forEach(mechanicService::save);
+        return args -> {
+            demoMechanicList.forEach(mechanicService::save);
+            logger.info("[Demo Data] Populated {} mechanics.", DEMO_ENTRIES_COUNT);
+        };
     }
 
     @Bean
@@ -71,7 +75,7 @@ public class DemoDataPopulator {
 
         if (mechanicsCount == 0 || clientsCount == 0) return args -> {};
 
-        List<Order> demoOrderList = Stream.generate(() -> {
+        Stream<Order> demoOrderList = Stream.generate(() -> {
             Order order = new Order();
             order.setOrderStatus(orderStatuses[RandomUtils.nextInt(0, 3)]);
             order.setDescription(faker.lorem().characters(10, 1024));
@@ -91,10 +95,12 @@ public class DemoDataPopulator {
             order.setMechanic(randomMechanic);
 
             return order;
-        }).limit(COUNT).collect(Collectors.toList());
-        logger.info("[Demo Data] Populated {} orders.", demoOrderList::size);
+        }).parallel().limit(DEMO_ENTRIES_COUNT);
 
-        return args -> demoOrderList.forEach(orderService::save);
+        return args -> {
+            demoOrderList.forEach(orderService::save);
+            logger.info("[Demo Data] Populated {} orders.", DEMO_ENTRIES_COUNT);
+        };
     }
 
     private Pageable getRandomPageable(long totalRecords) {
